@@ -58,13 +58,16 @@ public class DatabaseManager {
     
     private void closeConnection()
     {
-        try
+        if (connection != null)
         {
-            connection.close();
-        }
-        catch(Exception e)
-        {
-            System.out.println("Problem to close the connection to the database");
+            try
+            {
+                connection.close();
+            }
+            catch(Exception e)
+            {
+                System.out.println("Problem to close the connection to the database");
+            }
         }
     }
     

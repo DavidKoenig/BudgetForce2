@@ -5,7 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="Servlets.SessionLogin" %>
+<%@page import="budgetforce.control.servlets.SessionLogin" %>
 <!DOCTYPE html>
 <html>
     <head>
