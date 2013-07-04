@@ -38,6 +38,30 @@ public class Person {
         this.m_LastName = _LastName;
     }
 
+    public String getM_Email() {
+        return m_Email;
+    }
+
+    public void setM_Email(String m_Email) {
+        this.m_Email = m_Email;
+    }
+
+    public String getM_Phone1() {
+        return m_Phone1;
+    }
+
+    public void setM_Phone1(String m_Phone1) {
+        this.m_Phone1 = m_Phone1;
+    }
+
+    public String getM_Phone2() {
+        return m_Phone2;
+    }
+
+    public void setM_Phone2(String m_Phone2) {
+        this.m_Phone2 = m_Phone2;
+    }
+
     
     //---------------------------------------------------
     // Private variables
@@ -45,4 +69,8 @@ public class Person {
     private int     m_Id;
     private String  m_FirstName;
     private String  m_LastName;
+    private String  m_Email;
+    private String  m_Phone1;
+    private String  m_Phone2;
+
 }

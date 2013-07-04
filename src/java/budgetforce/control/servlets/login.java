@@ -89,9 +89,8 @@ public class login extends HttpServlet
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException 
     {        
-        DatabaseManager loginDBM = new DatabaseManager();
         
-        Login login = loginDBM.getLoginByUsername(request.getParameter("username"));
+        Login login = DatabaseManager.getDatabaseManager().getLoginByUsername(request.getParameter("username"));
         
         HttpSession session = request.getSession();
         SessionLogin sessionLogin = new SessionLogin();

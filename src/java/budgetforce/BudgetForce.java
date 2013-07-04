@@ -6,6 +6,7 @@ package budgetforce;
 
 import budgetforce.model.DatabaseManager;
 import budgetforce.model.Income;
+import budgetforce.model.Person;
 import java.util.ArrayList;
 /**
  *
@@ -24,13 +25,5 @@ public class BudgetForce {
         //income = db.getIncomeByID(1);
         
         //System.out.print(income.getTimestamp());
-        
-       
-        DatabaseManager db2 = new DatabaseManager();
-     
-        
-        
-       
-        
     }
 }

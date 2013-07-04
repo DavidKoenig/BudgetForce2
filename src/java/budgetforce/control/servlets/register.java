@@ -91,12 +91,11 @@ public class register extends HttpServlet {
             throws ServletException, IOException 
     {
         //insert in person
-        DatabaseManager insertPersonDBM = new DatabaseManager();
         
         Person person = new Person();
         person.setFirstName(request.getParameter("firstName"));
         person.setLastName(request.getParameter("lastName"));
-        int personID = insertPersonDBM.insertPerson(person);
+        int personID = DatabaseManager.getDatabaseManager().insertPerson(person);
         
         /*
         //get personID
@@ -105,7 +104,6 @@ public class register extends HttpServlet {
         * */ 
         
         //insert in Login
-        DatabaseManager insertLoginDBM = new DatabaseManager();
         
         Login login = new Login();
         login.setUsername(request.getParameter("username"));
@@ -114,7 +112,7 @@ public class register extends HttpServlet {
         //login.setSecurityQuestion("test");
         login.setType(Login.ELoginType.PRIVATE);
         login.setPersondId(personID);
-        insertLoginDBM.insertLogin(login);
+        DatabaseManager.getDatabaseManager().insertLogin(login);
         
         //redirect to mainpage
         RequestDispatcher rd = request.getRequestDispatcher("index.jsp");

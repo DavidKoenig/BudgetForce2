@@ -28,11 +28,36 @@ import java.sql.Date;
 
 public class DatabaseManager {
     
-    private Connection connection   = null;
-    private String databaseUser     = "postgres";
-    private String databasePw       = "pgr4";
-    private String url              = "jdbc:postgresql://localhost:5432/BudgetForce";
-    private String driver           = "org.postgresql.Driver";
+    private Connection connection                       = null;
+    private static final String s_DatabaseUser          = "postgres";
+    private static final String s_DatabasePw            = "pgr4";
+    private static final String s_Url                   = "jdbc:postgresql://localhost:5432/BudgetForce";
+    private static final String s_Driver                = "org.postgresql.Driver";
+    private static DatabaseManager s_SingletonManager   = null;     
+    
+    
+    private DatabaseManager()
+    {
+        this.establishConnection();
+    }
+    
+    //close connection when singleton will be destroyed
+    @Override
+    protected void finalize()
+    {
+        this.closeConnection();
+    }
+    
+    //Singleton
+    public static DatabaseManager getDatabaseManager()
+    {
+        if (s_SingletonManager == null)
+        {
+            s_SingletonManager = new DatabaseManager();
+        }
+        
+        return s_SingletonManager;
+    }
     
     
     private void establishConnection()
@@ -42,9 +67,9 @@ public class DatabaseManager {
       
         try
         {
-           Class.forName(driver);
+           Class.forName(s_Driver);
           
-           connection = DriverManager.getConnection(url, databaseUser, databasePw);
+           connection = DriverManager.getConnection(s_Url, s_DatabaseUser, s_DatabasePw);
            
            if (connection != null) {
                System.out.println("Connecting to database...");
@@ -74,8 +99,7 @@ public class DatabaseManager {
     
     //Address stuff
     public Address getAddressByID(int _id)
-    {establishConnection();
-        
+    {  
         ResultSet rs = null;
         
         Address address = new Address();
@@ -106,7 +130,7 @@ public class DatabaseManager {
                 address.setPhone2(rs.getString("phone2"));
                 
                 String type = rs.getString("type");
-                type.toUpperCase();
+                type = type.toUpperCase();
                 
                 if(type.equals(address.getType().ADDITIONAL))
                 {
@@ -133,15 +157,12 @@ public class DatabaseManager {
             System.out.println("Problem when filling into Element");
         }
         
-        finally {closeConnection();}
         return address;
     }
     
     
     public ArrayList<Address> getAddressByPersonID(int _personID)
-    {
-        establishConnection();
-        
+    {     
         ArrayList addressArray = new ArrayList<Address>();
         ResultSet rs = null;
         
@@ -204,14 +225,15 @@ public class DatabaseManager {
             System.out.println("Problem when filling into Element");
         }
         
-        finally {closeConnection();}
         return addressArray;
     }
     
     
-    public boolean insertAddress(Address _address)
+    public int insertAddress(Address _address)
     {
-        establishConnection();
+               
+        ResultSet rs = null;
+        int id = 0;
         
         try
         {
@@ -235,18 +257,43 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem in searching the database");
-            return false;
         }
         
-        finally {closeConnection();}
-        return true;
+         //get ID
+        try
+        {
+            PreparedStatement st = connection.prepareStatement("SELECT MAX(id) FROM address");
+           
+            rs = st.executeQuery();
+        }
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem in searching the database");
+        }
+        
+        try 
+        {
+            while(rs.next())
+            {  
+                id = rs.getInt("id");
+            }
+            rs.close();
+        } 
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem when selecting an Element");
+        }
+        
+        
+        return id;
     }
     
     
     public boolean updateAddress(Address _address)
     {
-        establishConnection();
-        
+             
         try
         {
             PreparedStatement st = connection.prepareStatement("UPDATE address SET "
@@ -274,15 +321,14 @@ public class DatabaseManager {
             return false;
         }
         
-        finally {closeConnection();}
+        
         return true;
     }
     
     
     public boolean deleteAddress(Address _address)
     {
-        establishConnection();
-
+        
         try
         {
             PreparedStatement st = connection.prepareStatement("DELETE FROM address WHERE id = ?");
@@ -297,7 +343,7 @@ public class DatabaseManager {
             return false;
         }
         
-        finally {closeConnection();}
+        
         return true;
     }
     
@@ -305,7 +351,7 @@ public class DatabaseManager {
     //Budget stuff
     public Budget getBudgetByID(int _id)
     {
-        establishConnection();
+        
         
         Budget budget = new Budget();
         ResultSet rs = null;
@@ -342,7 +388,7 @@ public class DatabaseManager {
             System.out.println("Problem when filling into Element");
         }
         
-        finally {closeConnection();}
+        
         return budget;
     }
     
@@ -388,7 +434,7 @@ public class DatabaseManager {
             System.out.println("Problem when filling into Element");
         }
         
-        finally {closeConnection();}
+        
         return arrayBudget;
     }
     
@@ -434,7 +480,7 @@ public class DatabaseManager {
             System.out.println("Problem when filling into Element");
         }
         
-        finally {closeConnection();}
+        
         return arrayBudget;
     }
     
@@ -480,14 +526,17 @@ public class DatabaseManager {
             System.out.println("Problem when filling into Element");
         }
         
-        finally {closeConnection();}
+        
         return arrayBudget;
     }
     
     
-    public boolean insertBudget(Budget _budget)
+    public int insertBudget(Budget _budget)
     {
-        establishConnection();
+        
+        
+        ResultSet rs    = null;
+        int id          = 0;
         
         try
         {
@@ -507,18 +556,42 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem in searching the database");
-            return false;
         }
         
-        finally {closeConnection();}
-        return true;
+        //get ID
+        try
+        {
+            PreparedStatement st = connection.prepareStatement("SELECT MAX(id) FROM budget");
+           
+            rs = st.executeQuery();
+        }
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem in searching the database");
+        }
+        
+        try 
+        {
+            while(rs.next())
+            {  
+                id = rs.getInt("id");
+            }
+            rs.close();
+        } 
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem when selecting an Element");
+        }
+        
+        
+        return id;
     }
     
     
     public boolean updateBudget(Budget _budget)
-    {
-        establishConnection();
-        
+    { 
         try
         {
             PreparedStatement st = connection.prepareStatement("UPDATE budget SET"
@@ -542,15 +615,13 @@ public class DatabaseManager {
             return false;
         }
         
-        finally {closeConnection();}
+        
         return true;
     }
     
     
     public boolean deleteBudget(int _id)
     {
-        establishConnection();
-
         try
         {
             PreparedStatement st = connection.prepareStatement("DELETE FROM budget WHERE id = ?");
@@ -565,7 +636,6 @@ public class DatabaseManager {
             return false;
         }
         
-        finally {closeConnection();}
         return true;
     }
     
@@ -573,7 +643,7 @@ public class DatabaseManager {
     //Category stuff
     public Category getCategoryByID(int _id)
     {
-        establishConnection();
+        
         
         ResultSet rs = null;
         
@@ -604,14 +674,17 @@ public class DatabaseManager {
             System.out.println("Problem when filling into Element");
         }
         
-        finally {closeConnection();}
+        
         
         return category;
     }
     
-    public boolean insertCategory(Category _category)
+    public int insertCategory(Category _category)
     {
-        establishConnection();
+        
+        
+        ResultSet rs    = null;
+        int             id = 0;
         
         try
         {
@@ -626,16 +699,42 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem in searching the database");
-            return false;
         }
         
-        finally {closeConnection();}
-        return true;
+        //get ID
+        try
+        {
+            PreparedStatement st = connection.prepareStatement("SELECT MAX(id) FROM category");
+           
+            rs = st.executeQuery();
+        }
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem in searching the database");
+        }
+        
+        try 
+        {
+            while(rs.next())
+            {  
+                id = rs.getInt("id");
+            }
+            rs.close();
+        } 
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem when selecting an Element");
+        }
+        
+        
+        return id;
     }
     
     public boolean updateCategory(Category _category)
     {
-        establishConnection();
+        
         
         try
         {
@@ -654,14 +753,14 @@ public class DatabaseManager {
             return false;
         }
         
-        finally {closeConnection();}
+        
         return true;
     }
     
     
     public boolean deleteCategory(int _id)
     {
-        establishConnection();
+        
 
         try
         {
@@ -677,7 +776,7 @@ public class DatabaseManager {
             return false;
         }
         
-        finally {closeConnection();}
+        
         return true;
     }
     
@@ -685,7 +784,7 @@ public class DatabaseManager {
     //Income stuff
     public Income getIncomeByID(int _id)
     {
-        establishConnection();
+        
         
         ResultSet rs = null;
         
@@ -723,7 +822,7 @@ public class DatabaseManager {
             System.out.println("Problem when filling into Element");
         }
         
-        finally {closeConnection();}
+        
         
         return income;
     }
@@ -731,7 +830,7 @@ public class DatabaseManager {
     
     public ArrayList<Income> getIncomeByPersonID(int _personID)
     {
-        establishConnection();
+        
         
         ResultSet rs = null;
         
@@ -773,14 +872,14 @@ public class DatabaseManager {
             System.out.println("Problem when filling into Element");
         }
          
-        finally {closeConnection();}
+        
         return incomeArray;
     }
     
     
     public ArrayList<Income> getIncomeByIncomeID(int _incomeID)
     {
-        establishConnection();
+        
         
         ResultSet rs = null;
         
@@ -822,13 +921,16 @@ public class DatabaseManager {
             System.out.println("Problem when filling into Element");
         }
          
-        finally {closeConnection();}
+        
         return incomeArray;
     }
     
-    public boolean insertIncome(Income _income)
+    public int insertIncome(Income _income)
     {
-        establishConnection();
+        
+        
+        ResultSet rs    = null;
+        int id          = 0;
         
         try
         {
@@ -852,17 +954,43 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem in searching the database");
-            return false;
         }
         
-        finally {closeConnection();}
-        return true;
+        //get ID
+        try
+        {
+            PreparedStatement st = connection.prepareStatement("SELECT MAX(id) FROM income");
+           
+            rs = st.executeQuery();
+        }
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem in searching the database");
+        }
+        
+        try 
+        {
+            while(rs.next())
+            {  
+                id = rs.getInt("id");
+            }
+            rs.close();
+        } 
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem when selecting an Element");
+        }
+        
+        
+        return id;
     }
     
     
     public boolean updateIncome(Income _income)
     {
-        establishConnection();
+        
         
         try
         {
@@ -889,14 +1017,14 @@ public class DatabaseManager {
             return false;
         }
         
-        finally {closeConnection();}
+        
         return true;
     }
     
     
     public boolean deleteIncome(int _id)
     {
-        establishConnection();
+        
         
         try
         {
@@ -914,7 +1042,7 @@ public class DatabaseManager {
             return false;
         }
         
-        finally {closeConnection();}
+        
         return true;
     }
     
@@ -922,7 +1050,7 @@ public class DatabaseManager {
     //Login stuff
     public Login getLoginByUsername(String _username)
     {
-        establishConnection();
+        
         
         Login login = new Login();
         ResultSet rs = null;
@@ -969,14 +1097,14 @@ public class DatabaseManager {
             System.out.println("Problem when filling into Element");
         }
         
-        finally {closeConnection();}
+        
         return login;
     }
     
     
     public Login getLoginByPersonID(int _personID)
     {
-        establishConnection();
+        
         
         Login login = new Login();
         ResultSet rs = null;
@@ -1023,14 +1151,17 @@ public class DatabaseManager {
             System.out.println("Problem when filling into Element");
         }
         
-        finally {closeConnection();}
+        
         return login;
     }
     
     
-    public boolean insertLogin(Login _login)
+    public int insertLogin(Login _login)
     {
-        establishConnection();
+        
+        
+        ResultSet rs    = null;
+        int id          = 0;
         
         try
         {
@@ -1049,17 +1180,43 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem in searching the database");
-            return false;
         }
         
-        finally {closeConnection();}
-        return true;
+        //get ID
+        try
+        {
+            PreparedStatement st = connection.prepareStatement("SELECT MAX(id) FROM login");
+           
+            rs = st.executeQuery();
+        }
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem in searching the database");
+        }
+        
+        try 
+        {
+            while(rs.next())
+            {  
+                id = rs.getInt("id");
+            }
+            rs.close();
+        } 
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem when selecting an Element");
+        }
+        
+        
+        return id;
     }
     
     
     public boolean updateLogin(Login _login) //username can not be changed 
     {
-        establishConnection();
+        
         
         try
         {
@@ -1082,14 +1239,14 @@ public class DatabaseManager {
             return false;
         }
         
-        finally {closeConnection();}
+        
         return true;
     }
     
     
     public boolean updateLoginPassword(String _username, String _password)
     {
-        establishConnection();
+        
         
         try
         {
@@ -1108,14 +1265,14 @@ public class DatabaseManager {
             return false;
         }
         
-        finally {closeConnection();}
+        
         return true;
     }
     
     
     public boolean updateLoginSecurityQuestion(String _username, String _securityQuestion)
     {
-        establishConnection();
+        
         
         try
         {
@@ -1134,14 +1291,14 @@ public class DatabaseManager {
             return false;
         }
         
-        finally {closeConnection();}
+        
         return true;
     }
     
     
     public boolean deleteLogin(String _username)
     {
-        establishConnection();
+        
         
         try
         {
@@ -1159,7 +1316,7 @@ public class DatabaseManager {
             return false;
         }
         
-        finally {closeConnection();}
+        
         return true;
     }
     
@@ -1167,7 +1324,7 @@ public class DatabaseManager {
     //Outgoing Stuff
     public Outgoing getOutgoingByID(int _id)
     {
-        establishConnection();
+        
         
         Outgoing outgoing = new Outgoing();
         ResultSet rs = null;
@@ -1206,13 +1363,13 @@ public class DatabaseManager {
             System.out.println("Problem when filling into Element");
         }
         
-        finally {closeConnection();}
+        
         return outgoing;
     }
     
     public ArrayList<Outgoing> getOutgoingByBudgetID(int _budgetID)
     {
-        establishConnection();
+        
         
         ArrayList arrayOutgoing = new ArrayList<Outgoing>();
         
@@ -1256,13 +1413,13 @@ public class DatabaseManager {
             System.out.println("Problem when filling into Element");
         }
         
-        finally {closeConnection();}
+        
         return arrayOutgoing;
     }
     
     public ArrayList<Outgoing> getOutgoingByCategoryID(int _categoryID)
     {
-        establishConnection();
+        
         
         ArrayList arrayOutgoing = new ArrayList<Outgoing>();
         
@@ -1306,13 +1463,16 @@ public class DatabaseManager {
             System.out.println("Problem when filling into Element");
         }
         
-        finally {closeConnection();}
+        
         return arrayOutgoing;
     }
     
-    public boolean insertOutgoing(Outgoing _outgoing)
+    public int insertOutgoing(Outgoing _outgoing)
     {
-        establishConnection();
+        
+        
+        ResultSet rs    = null;
+        int id          = 0;
         
         try
         {
@@ -1334,16 +1494,42 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem in searching the database");
-            return false;
         }
         
-        finally {closeConnection();}
-        return true;
+        //get ID
+        try
+        {
+            PreparedStatement st = connection.prepareStatement("SELECT MAX(id) FROM outgoing");
+           
+            rs = st.executeQuery();
+        }
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem in searching the database");
+        }
+        
+        try 
+        {
+            while(rs.next())
+            {  
+                id = rs.getInt("id");
+            }
+            rs.close();
+        } 
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem when selecting an Element");
+        }
+        
+        
+        return id;
     }
     
     public boolean updateOutgoing(Outgoing _outgoing)
     {
-        establishConnection();
+        
         
         try
         {
@@ -1369,13 +1555,13 @@ public class DatabaseManager {
             return false;
         }
         
-        finally {closeConnection();}
+        
         return true;
     }
     
     public boolean deleteOutgoing(int _id)
     {
-        establishConnection();
+        
         
         try
         {
@@ -1393,7 +1579,7 @@ public class DatabaseManager {
             return false;
         }
         
-        finally {closeConnection();}
+        
         return true;
     }
     
@@ -1401,7 +1587,7 @@ public class DatabaseManager {
     //OutgoingHasTax stuff
     public OutgoingHasTax getOutgoingHasTaxByID(int _outgoingID, int _taxID)
     {
-        establishConnection();
+        
         
         OutgoingHasTax oht = new OutgoingHasTax();
         ResultSet rs = null;
@@ -1437,14 +1623,14 @@ public class DatabaseManager {
             System.out.println("Problem when filling into Element");
         }
         
-        finally {closeConnection();}
+        
         return oht;
     }
     
     
     public ArrayList<OutgoingHasTax> getOutgoingHasTaxByOutgoingID(int _outgoingID)
     {
-        establishConnection();
+        
         
         ArrayList arrayOht = new ArrayList<OutgoingHasTax>();
         
@@ -1483,14 +1669,17 @@ public class DatabaseManager {
             System.out.println("Problem when filling into Element");
         }
         
-        finally {closeConnection();}
+        
         return arrayOht;
     }
     
     
-    public boolean insertOutgoingHasTaxByID(OutgoingHasTax _outgoingHasTax)
+    public int insertOutgoingHasTaxByID(OutgoingHasTax _outgoingHasTax)
     {
-        establishConnection();
+        
+        
+        ResultSet rs    = null;
+        int id          = 0;
         
         try
         {
@@ -1508,16 +1697,42 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem in searching the database");
-            return false;
         }
         
-        finally {closeConnection();}
-        return true;
+        //get ID
+        try
+        {
+            PreparedStatement st = connection.prepareStatement("SELECT MAX(id) FROM outgoing_has_tax");
+           
+            rs = st.executeQuery();
+        }
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem in searching the database");
+        }
+        
+        try 
+        {
+            while(rs.next())
+            {  
+                id = rs.getInt("id");
+            }
+            rs.close();
+        } 
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem when selecting an Element");
+        }
+        
+        
+        return id;
     }
     
     public boolean updateOutgoingHasTax(OutgoingHasTax _outgoingHasTax)
     {
-        establishConnection();
+        
         
         try
         {
@@ -1538,13 +1753,13 @@ public class DatabaseManager {
             return false;
         }
         
-        finally {closeConnection();}
+        
         return true;
     }
     
     public boolean deleteOutgoingHasTaxByID(int _outgoingID, int _taxID)
     {
-        establishConnection();
+        
         
         try
         {
@@ -1563,7 +1778,7 @@ public class DatabaseManager {
             return false;
         }
         
-        finally {closeConnection();}
+        
         return true;
     }
     
@@ -1571,7 +1786,7 @@ public class DatabaseManager {
     //Person stuff
     public Person getPersonByID(int _id)
     {
-        establishConnection();
+        
         
         Person person = new Person();
         ResultSet rs = null;
@@ -1605,14 +1820,14 @@ public class DatabaseManager {
             System.out.println("Problem when filling into Element");
         }
         
-        finally {closeConnection();}
+        
         return person;
     }
     
     
     public int insertPerson(Person _person)     //returns the id of the inserted person
     {
-        establishConnection();
+        
         
         ResultSet rs = null;
         int id = 0;
@@ -1662,14 +1877,14 @@ public class DatabaseManager {
         }
         
         
-        finally {closeConnection();}
+        
         return id;
     }
     
     
     public boolean updatePerson(Person _person)
     {
-        establishConnection();
+        
         
         try
         {
@@ -1689,14 +1904,14 @@ public class DatabaseManager {
             return false;
         }
         
-        finally {closeConnection();}
+        
         return true;
     }
     
                  
     public boolean deletePerson(int _id)
     {
-        establishConnection();
+        
         
         try
         {
@@ -1714,7 +1929,7 @@ public class DatabaseManager {
             return false;
         }
         
-        finally {closeConnection();}
+        
         return true;
     }
     
@@ -1722,7 +1937,7 @@ public class DatabaseManager {
     //Project stuff
     public Project getProjectByID(int _id)
     {
-        establishConnection();
+        
         
         Project project = new Project();
         ResultSet rs = null;
@@ -1755,14 +1970,17 @@ public class DatabaseManager {
             System.out.println("Problem when filling into Element");
         }
         
-        finally {closeConnection();}
+        
         return project;
     }
     
     
-    public boolean insertProject(Project _project)
+    public int insertProject(Project _project)
     {
-        establishConnection();
+        
+        
+        ResultSet rs    = null;
+        int id          = 0;
         
         try
         {
@@ -1777,16 +1995,42 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem in searching the database");
-            return false;
         }
         
-        finally {closeConnection();}
-        return true;
+        //get ID
+        try
+        {
+            PreparedStatement st = connection.prepareStatement("SELECT MAX(id) FROM project");
+           
+            rs = st.executeQuery();
+        }
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem in searching the database");
+        }
+        
+        try 
+        {
+            while(rs.next())
+            {  
+                id = rs.getInt("id");
+            }
+            rs.close();
+        } 
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem when selecting an Element");
+        }
+        
+        
+        return id;
     }
     
     public boolean updateProject(Project _project)
     {
-        establishConnection();
+        
         
         try
         {
@@ -1804,13 +2048,13 @@ public class DatabaseManager {
             return false;
         }
         
-        finally {closeConnection();}
+        
         return true;
     }
     
     public boolean deleteProject(int _id)
     {
-        establishConnection();
+        
         
         try
         {
@@ -1828,7 +2072,7 @@ public class DatabaseManager {
             return false;
         }
         
-        finally {closeConnection();}
+        
         return true;
     }
     
@@ -1836,7 +2080,7 @@ public class DatabaseManager {
     //SystemNotification stuff
     public SystemNotification getSystemNotificationByID(int _id)
     {
-        establishConnection();
+        
         
         SystemNotification notification = new SystemNotification();
         ResultSet rs = null;
@@ -1886,13 +2130,16 @@ public class DatabaseManager {
             System.out.println("Problem when filling into Element");
         }
         
-        finally {closeConnection();}
+        
         return notification;
     }
     
-    public boolean insertSystemNotification(SystemNotification _systemNotification)
+    public int insertSystemNotification(SystemNotification _systemNotification)
     {
-        establishConnection();
+        
+        
+        ResultSet rs    = null;
+        int id          = 0;
         
         try
         {
@@ -1908,16 +2155,42 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem in searching the database");
-            return false;
         }
         
-        finally {closeConnection();}
-        return true;
+        //get ID
+        try
+        {
+            PreparedStatement st = connection.prepareStatement("SELECT MAX(id) FROM system_notification");
+           
+            rs = st.executeQuery();
+        }
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem in searching the database");
+        }
+        
+        try 
+        {
+            while(rs.next())
+            {  
+                id = rs.getInt("id");
+            }
+            rs.close();
+        } 
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem when selecting an Element");
+        }
+        
+        
+        return id;
     }
     
     public boolean updateSystemNotification(SystemNotification _systemNotification)
     {
-        establishConnection();
+        
         
         try
         {
@@ -1937,13 +2210,13 @@ public class DatabaseManager {
             return false;
         }
         
-        finally {closeConnection();}
+        
         return true;
     }
     
     public boolean deleteSystemNotification(int _id)
     {
-        establishConnection();
+        
         
         try
         {
@@ -1961,7 +2234,7 @@ public class DatabaseManager {
             return false;
         }
         
-        finally {closeConnection();}
+        
         return true;
     }
     
@@ -1969,7 +2242,7 @@ public class DatabaseManager {
     //Tax stuff
     public Tax getTaxByID(int _id)
     {
-        establishConnection();
+        
         
         Tax tax = new Tax();
         ResultSet rs = null;
@@ -2003,14 +2276,17 @@ public class DatabaseManager {
             System.out.println("Problem when filling into Element");
         }
         
-        finally {closeConnection();}
+        
         return tax;
     }
     
-    public boolean insertTax(Tax _tax)
+    public int insertTax(Tax _tax)
     {
-        establishConnection();
         
+        
+        ResultSet rs    = null;
+        int id          = 0;
+                
         try
         {
             PreparedStatement st = connection.prepareStatement("INSERT INTO tax"
@@ -2026,16 +2302,42 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem in searching the database");
-            return false;
         }
         
-        finally {closeConnection();}
-        return true; 
+        //get ID
+        try
+        {
+            PreparedStatement st = connection.prepareStatement("SELECT MAX(id) FROM tax");
+           
+            rs = st.executeQuery();
+        }
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem in searching the database");
+        }
+        
+        try 
+        {
+            while(rs.next())
+            {  
+                id = rs.getInt("id");
+            }
+            rs.close();
+        } 
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem when selecting an Element");
+        }
+        
+        
+        return id;
     }
     
     public boolean updateTax(Tax _tax)
     {
-        establishConnection();
+        
         
         try
         {
@@ -2056,13 +2358,13 @@ public class DatabaseManager {
             return false;
         }
         
-        finally {closeConnection();}
+        
         return true;
     }
     
     public boolean deleteTax(int _id)
     {
-        establishConnection();
+        
         
         try
         {
@@ -2080,7 +2382,7 @@ public class DatabaseManager {
             return false;
         }
         
-        finally {closeConnection();}
+        
         return true;
     }
     
