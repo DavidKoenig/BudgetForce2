@@ -65,30 +65,6 @@ public class Address {
         this.m_Country = _Country;
     }
 
-    public String getEmail() {
-        return m_Email;
-    }
-
-    public void setEmail(String _Email) {
-        this.m_Email = _Email;
-    }
-
-    public String getPhone1() {
-        return m_Phone1;
-    }
-
-    public void setPhone1(String _Phone1) {
-        this.m_Phone1 = _Phone1;
-    }
-
-    public String getPhone2() {
-        return m_Phone2;
-    }
-
-    public void setPhone2(String _Phone2) {
-        this.m_Phone2 = _Phone2;
-    }
-
     public String getAddressAddition() {
         return m_AddressAddition;
     }
@@ -121,9 +97,6 @@ public class Address {
     private String          m_City;
     private String          m_ZipCode;
     private String          m_Country;
-    private String          m_Email;
-    private String          m_Phone1;
-    private String          m_Phone2;
     private String          m_AddressAddition;
     private EAddressType    m_Type;
     private int             m_PersondId;

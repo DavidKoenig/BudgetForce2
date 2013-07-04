@@ -38,27 +38,27 @@ public class Person {
         this.m_LastName = _LastName;
     }
 
-    public String getM_Email() {
+    public String getEmail() {
         return m_Email;
     }
 
-    public void setM_Email(String m_Email) {
+    public void setEmail(String m_Email) {
         this.m_Email = m_Email;
     }
 
-    public String getM_Phone1() {
+    public String getPhone1() {
         return m_Phone1;
     }
 
-    public void setM_Phone1(String m_Phone1) {
+    public void setPhone1(String m_Phone1) {
         this.m_Phone1 = m_Phone1;
     }
 
-    public String getM_Phone2() {
+    public String getPhone2() {
         return m_Phone2;
     }
 
-    public void setM_Phone2(String m_Phone2) {
+    public void setPhone2(String m_Phone2) {
         this.m_Phone2 = m_Phone2;
     }
 

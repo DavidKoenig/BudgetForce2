@@ -125,9 +125,8 @@ public class DatabaseManager {
                 address.setCity(rs.getString("city"));
                 address.setZipCode(rs.getString("zipcode"));
                 address.setCountry(rs.getString("country"));
-                address.setEmail(rs.getString("email"));
-                address.setPhone1(rs.getString("phone1"));
-                address.setPhone2(rs.getString("phone2"));
+                address.setPersondId(rs.getInt("personID"));
+                address.setAddressAddition(rs.getString("addressAddition"));
                 
                 String type = rs.getString("type");
                 type = type.toUpperCase();
@@ -189,9 +188,6 @@ public class DatabaseManager {
                 address.setCity(rs.getString("city"));
                 address.setZipCode(rs.getString("zipcode"));
                 address.setCountry(rs.getString("country"));
-                address.setEmail(rs.getString("email"));
-                address.setPhone1(rs.getString("phone1"));
-                address.setPhone2(rs.getString("phone2"));
                 address.setPersondId(rs.getInt("personID"));
                 address.setAddressAddition(rs.getString("addressAddition"));
                 
@@ -238,15 +234,12 @@ public class DatabaseManager {
         try
         {
             PreparedStatement st = connection.prepareStatement("INSERT INTO address(\"streetNmbr\", "
-                    + "city, zipcode, country, email, phone1, phone2, type, \"personID\", \"addressAddition\")"
+                    + "city, zipcode, country, type, \"personID\", \"addressAddition\")"
                     + "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             st.setString(1, _address.getStreetNmbr());
             st.setString(2, _address.getCity());
             st.setString(3, _address.getZipCode());
             st.setString(4, _address.getCountry());
-            st.setString(5, _address.getEmail());
-            st.setString(6, _address.getPhone1());
-            st.setString(7, _address.getPhone2());
             st.setString(8, _address.getType().toString().toLowerCase()); 
             st.setInt(9, _address.getPersondId());
             st.setString(10, _address.getAddressAddition());
@@ -297,16 +290,14 @@ public class DatabaseManager {
         try
         {
             PreparedStatement st = connection.prepareStatement("UPDATE address SET "
-                    + "\"streetNmbr\" = ?, city = ?, zipcode = ?, country = ?, email = ?, phone1 = ?, "
-                    + "phone2 = ?, type = ?, \"personID\" = ?, \"addressAddition\" = ?)"
+                    + "\"streetNmbr\" = ?, city = ?, zipcode = ?, country = ?, "
+                    + "type = ?, \"personID\" = ?, \"addressAddition\" = ?)"
                     + "WHERE id = ? ");
+            
             st.setString(1, _address.getStreetNmbr());
             st.setString(2, _address.getCity());
             st.setString(3, _address.getZipCode());
             st.setString(4, _address.getCountry());
-            st.setString(5, _address.getEmail());
-            st.setString(6, _address.getPhone1());
-            st.setString(7, _address.getPhone2());
             st.setString(8, _address.getType().toString().toLowerCase()); 
             st.setInt(9, _address.getPersondId());
             st.setString(10, _address.getAddressAddition());
@@ -1811,6 +1802,9 @@ public class DatabaseManager {
                 person.setId(rs.getInt("id"));
                 person.setFirstName(rs.getString("firstName"));
                 person.setLastName(rs.getString("lastName"));
+                person.setEmail(rs.getString("email"));
+                person.setPhone1(rs.getString("phone1"));
+                person.setPhone2(rs.getString("phone2"));
             }
             rs.close();
         } 
@@ -1889,11 +1883,14 @@ public class DatabaseManager {
         try
         {
             PreparedStatement st = connection.prepareStatement("UPDATE person SET \"firstName\" = ?, "
-                    + " \"lastName\" = ? WHERE id = ?");
+                    + " \"lastName\" = ?, phone1 = ?, phone2 = ?, email = ? WHERE id = ?");
            
             st.setInt(1, _person.getId());
             st.setString(2, _person.getFirstName());
             st.setString(3, _person.getLastName());
+            st.setString(4, _person.getPhone1());
+            st.setString(5, _person.getPhone2());
+            st.setString(6, _person.getEmail());
            
             st.executeUpdate();
         }
