@@ -1,8 +1,9 @@
+package budgetforce.control.servlets;
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
- 
-package budgetforce.control.basti;
+*/
 
 import budgetforce.model.DatabaseManager;
 import budgetforce.model.Login;
@@ -22,7 +23,8 @@ import javax.servlet.http.HttpSession;
 /**
  *
  * @author Soi Fon
- 
+*/
+
 @WebServlet(name = "login", urlPatterns = {"/login"})
 public class login extends HttpServlet 
 {
@@ -36,14 +38,14 @@ public class login extends HttpServlet
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
-     
+     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException 
     {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
-            /* TODO output your page here. You may use following sample code. 
+            /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
@@ -67,7 +69,7 @@ public class login extends HttpServlet
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
-     
+    */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException 
@@ -83,7 +85,7 @@ public class login extends HttpServlet
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
-     
+    */ 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException 
@@ -115,10 +117,10 @@ public class login extends HttpServlet
      * Returns a short description of the servlet.
      *
      * @return a String containing servlet description
-     
+    */ 
     @Override
     public String getServletInfo() {
         return "Logs a new user in";
     }// </editor-fold>
 }
-* */
+

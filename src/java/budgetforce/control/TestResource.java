@@ -12,13 +12,14 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
+//import com.google.gson; 
 
 /**
  * REST Web Service
  *
  * @author kinske
  */
-@Path("test")
+@Path("/test")
 public class TestResource {
 
     @Context
@@ -37,8 +38,7 @@ public class TestResource {
     @GET
     @Produces("text/html")
     public String getHtml() {
-        //TODO return proper representation object
-        //throw new UnsupportedOperationException();
+
         return "<h1> TEST REST </h1>";
     }
 
