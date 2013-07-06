@@ -1,14 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package budgetforce.control;
 
+// <editor-fold defaultstate="collapsed" desc="imports">
 import budgetforce.model.Person;
 import budgetforce.model.DatabaseManager;
 
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.core.Response;
 
 import javax.ws.rs.PathParam;
@@ -21,7 +17,7 @@ import javax.ws.rs.DELETE;
 
 import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
-
+// </editor-fold>
 
 /**
  * REST Web Service
@@ -29,9 +25,9 @@ import javax.ws.rs.Consumes;
  * @author David König
  */
 @Path("/person")
-public class PersonRest {
+public class PersonResource {
 
-    public PersonRest() 
+    public PersonResource() 
     {
     }
 
@@ -51,8 +47,7 @@ public class PersonRest {
     @Consumes("application/json")
     @Produces("application/json")
     public Response postPerson(Person _Person) 
-    {
-            
+    {     
         DatabaseManager.getDatabaseManager().insertPerson(_Person);
         
         return Response.status(201).entity(_Person).build();
@@ -62,8 +57,8 @@ public class PersonRest {
     @Path("{id}")
     @Consumes("application/json")
     @Produces("application/json")
-    public Response putPerson(@PathParam("id") Integer _Id, Person _Person) {
-        
+    public Response putPerson(@PathParam("id") Integer _Id, Person _Person) 
+    {
         _Person.setId(_Id);
         DatabaseManager.getDatabaseManager().updatePerson(_Person);
         
@@ -74,9 +69,8 @@ public class PersonRest {
     @Path("{id}")
     @Consumes("application/json")
     @Produces("application/json")
-    public Response putPerson(@PathParam("id") Integer _Id) {
-        
-        
+    public Response deletePerson(@PathParam("id") Integer _Id) 
+    {
         boolean successful = DatabaseManager.getDatabaseManager().deletePerson(_Id);
         
         return Response.status(201).entity(successful).build();

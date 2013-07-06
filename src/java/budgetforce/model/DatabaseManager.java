@@ -1,6 +1,7 @@
 
 package budgetforce.model;
 
+// <editor-fold defaultstate="collapsed" desc="imports">
 import budgetforce.model.Budget;
 import budgetforce.model.Income;
 import budgetforce.model.Login;
@@ -11,11 +12,9 @@ import budgetforce.model.Tax;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.sql.PreparedStatement;
-import java.sql.Date;
+// </editor-fold>
 
 /**
  * @author David König
@@ -236,9 +235,9 @@ public class DatabaseManager {
         
         try
         {
-            PreparedStatement st = connection.prepareStatement("INSERT INTO address(\"streetNmbr\", "
-                    + "city, zipcode, country, type, \"personID\", \"addressAddition\")"
-                    + "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            PreparedStatement st = connection.prepareStatement("INSERT INTO address(\"streetNmbr\","
+                    + " city, zipcode, country, type, \"personID\", \"addressAddition\")"
+                    + " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             st.setString(1, _address.getStreetNmbr());
             st.setString(2, _address.getCity());
             st.setString(3, _address.getZipCode());
@@ -290,10 +289,10 @@ public class DatabaseManager {
     {       
         try
         {
-            PreparedStatement st = connection.prepareStatement("UPDATE address SET "
-                    + "\"streetNmbr\" = ?, city = ?, zipcode = ?, country = ?, "
-                    + "type = ?, \"personID\" = ?, \"addressAddition\" = ?)"
-                    + "WHERE id = ? ");
+            PreparedStatement st = connection.prepareStatement("UPDATE address SET"
+                    + " \"streetNmbr\" = ?, city = ?, zipcode = ?, country = ?,"
+                    + " type = ?, \"personID\" = ?, \"addressAddition\" = ?)"
+                    + " WHERE id = ? ");
             
             st.setString(1, _address.getStreetNmbr());
             st.setString(2, _address.getCity());
@@ -524,9 +523,9 @@ public class DatabaseManager {
         
         try
         {
-            PreparedStatement st = connection.prepareStatement("INSERT INTO budget(name, "
-                    + "currency, \"personID\", \"projectID\", \"budgetID\")"
-                    + "VALUES(?, ?, ?, ?, ?)");
+            PreparedStatement st = connection.prepareStatement("INSERT INTO budget(name,"
+                    + " currency, \"personID\", \"projectID\", \"budgetID\")"
+                    + " VALUES(?, ?, ?, ?, ?)");
             
             st.setString(1, _budget.getName());
             st.setString(2, _budget.getCurrency());
@@ -578,9 +577,9 @@ public class DatabaseManager {
         try
         {
             PreparedStatement st = connection.prepareStatement("UPDATE budget SET"
-                    + "name = ?, currency = ?, \"personID\" = ?, \"projectID\" = ?,"
+                    + " name = ?, currency = ?, \"personID\" = ?, \"projectID\" = ?,"
                     + " \"budgetID\" = ? "
-                    + "WHERE id = ?");
+                    + " WHERE id = ?");
             
             st.setString(1, _budget.getName());
             st.setString(2, _budget.getCurrency());
@@ -667,7 +666,7 @@ public class DatabaseManager {
         try
         {
             PreparedStatement st = connection.prepareStatement("INSERT INTO category(name)"
-                    + "VALUES(?)");
+                    + " VALUES(?)");
             
             st.setString(1, _category.getM_Name());
             
@@ -712,13 +711,11 @@ public class DatabaseManager {
     
     
     public boolean updateCategory(Category _category)
-    {
-        
-        
+    {  
         try
         {
             PreparedStatement st = connection.prepareStatement("UPDATE budget SET"
-                    + "name = ? WHERE id = ?");
+                    + " name = ? WHERE id = ?");
             
             st.setString(1, _category.getM_Name());
             st.setInt(2, _category.getM_Id());
@@ -900,9 +897,9 @@ public class DatabaseManager {
         
         try
         {
-            PreparedStatement st = connection.prepareStatement("INSERT INTO income(name, "
-                    + "amount, timestamp, period, start, end, \"personID\", \"incomeID\")"
-                    + "VALUES(?, ?, ?, ?, ?, ?, ?, ?)");
+            PreparedStatement st = connection.prepareStatement("INSERT INTO income(name,"
+                    + " amount, timestamp, period, start, end, \"personID\", \"incomeID\")"
+                    + " VALUES(?, ?, ?, ?, ?, ?, ?, ?)");
             
             st.setString(1, _income.getName());
             st.setFloat(2, _income.getAmount());
@@ -989,7 +986,7 @@ public class DatabaseManager {
         try
         {
             PreparedStatement st = connection.prepareStatement("DELETE FROM income"
-                    + "WHERE id = ?");
+                    + " WHERE id = ?");
             
             st.setInt(1, _id);
             
@@ -1117,9 +1114,9 @@ public class DatabaseManager {
         
         try
         {
-            PreparedStatement st = connection.prepareStatement("INSERT INTO login(username, "
-                    + "password, \"securityQuestion\", \"personID\", type)"
-                    + "VALUES(?, ?, ?, ?, ?)");
+            PreparedStatement st = connection.prepareStatement("INSERT INTO login(username,"
+                    + " password, \"securityQuestion\", \"personID\", type)"
+                    + " VALUES(?, ?, ?, ?, ?)");
             st.setString(1, _login.getUsername());
             st.setString(2, _login.getPassword());
             st.setString(3, _login.getSecurityQuestion());
@@ -1170,8 +1167,8 @@ public class DatabaseManager {
         try
         {
             PreparedStatement st = connection.prepareStatement("UPDATE login"
-                    + "SET password = ?, \"securityQuestion\" = ?, \"personID\" = ?, type = ?"
-                    + "WHERE username = ?");
+                    + " SET password = ?, \"securityQuestion\" = ?, \"personID\" = ?, type = ?"
+                    + " WHERE username = ?");
         
             st.setString(1, _login.getPassword());
             st.setString(2, _login.getSecurityQuestion());
@@ -1197,7 +1194,7 @@ public class DatabaseManager {
         try
         {
             PreparedStatement st = connection.prepareStatement("UPDATE login"
-                    + "SET password = ? WHERE username = ?");
+                    + " SET password = ? WHERE username = ?");
             
             st.setString(1, _password);
             st.setString(2, _username);
@@ -1220,7 +1217,7 @@ public class DatabaseManager {
         try
         {
             PreparedStatement st = connection.prepareStatement("UPDATE login"
-                    + "SET \"securityQuestion\" = ? WHERE username = ?");
+                    + " SET \"securityQuestion\" = ? WHERE username = ?");
             
             st.setString(1, _securityQuestion);
             st.setString(2, _username);
@@ -1243,7 +1240,7 @@ public class DatabaseManager {
         try
         {
             PreparedStatement st = connection.prepareStatement("DELETE FROM login"
-                    + "WHERE username = ?");
+                    + " WHERE username = ?");
             
             st.setString(1, _username);
             
@@ -1408,9 +1405,9 @@ public class DatabaseManager {
         
         try
         {
-            PreparedStatement st = connection.prepareStatement("INSERT INTO outgoing(amount, "
+            PreparedStatement st = connection.prepareStatement("INSERT INTO outgoing(amount,"
                     + " period, start, end, timestamp, \"budgetID\", \"categoryID\") "
-                    + "VALUES(?, ?, ?, ?, ?, ?)");
+                    + " VALUES(?, ?, ?, ?, ?, ?)");
            
             st.setFloat(1, _outgoing.getAmount());
             st.setString(2, _outgoing.getPeriod());
@@ -1494,7 +1491,7 @@ public class DatabaseManager {
         try
         {
             PreparedStatement st = connection.prepareStatement("DELETE FROM outgoing"
-                    + "WHERE id = ?");
+                    + " WHERE id = ?");
             
             st.setInt(1, _id);
             
@@ -1522,7 +1519,7 @@ public class DatabaseManager {
         try
         {
             PreparedStatement st = connection.prepareStatement("SELECT * FROM outgoing_has_tax WHERE \"outgoingID\" = ?"
-                    + "and \"taxID\" = ? ");
+                    + " and \"taxID\" = ? ");
             
             st.setInt(1, _outgoingID);
             st.setInt(2, _taxID);
@@ -1605,8 +1602,8 @@ public class DatabaseManager {
         try
         {
             PreparedStatement st = connection.prepareStatement("INSERT INTO outgoing_has_tax"
-                    + "(\"outgoingID\", \"taxID\", write-off) "
-                    + "VALUES(?, ?, ?)");
+                    + " (\"outgoingID\", \"taxID\", write-off) "
+                    + " VALUES(?, ?, ?)");
            
             st.setInt(1, _outgoingHasTax.getOutgoingId());
             st.setInt(2, _outgoingHasTax.getTaxId());
@@ -1656,7 +1653,7 @@ public class DatabaseManager {
         try
         {
             PreparedStatement st = connection.prepareStatement("UPDATE outgoing_has_tax "
-                    + "SET write-off = ? WHERE \"outgoingID\" = ? AND \"taxID\" = ?");
+                    + " SET write-off = ? WHERE \"outgoingID\" = ? AND \"taxID\" = ?");
            
             st.setBoolean(1, _outgoingHasTax.isWriteOff());
             st.setInt(2, _outgoingHasTax.getOutgoingId());
@@ -1681,7 +1678,7 @@ public class DatabaseManager {
         try
         {
             PreparedStatement st = connection.prepareStatement("DELETE FROM person"
-                    + "WHERE \"outgoingID\" = ? AND \"taxID\" = ?");
+                    + " WHERE \"outgoingID\" = ? AND \"taxID\" = ?");
             
             st.setInt(2, _outgoingID);
             st.setInt(3, _taxID);
@@ -1749,8 +1746,8 @@ public class DatabaseManager {
         
         try
         {
-            PreparedStatement st = connection.prepareStatement("INSERT INTO person(\"firstName\", "
-                    + "\"lastName\", email, phone1, phone2) VALUES(?, ?, ?, ?, ?)");
+            PreparedStatement st = connection.prepareStatement("INSERT INTO person(\"firstName\","
+                    + " \"lastName\", email, phone1, phone2) VALUES(?, ?, ?, ?, ?)");
            
             st.setString(1, _person.getFirstName());
             st.setString(2, _person.getLastName());
@@ -1832,11 +1829,11 @@ public class DatabaseManager {
         try
         {
             PreparedStatement st = connection.prepareStatement("DELETE FROM person"
-                    + "WHERE id = ?");
+                    + " WHERE id = ?");
             
             st.setInt(1, _id);
             
-            st.executeUpdate();
+            int result = st.executeUpdate();
         }
         
         catch(Exception e)
@@ -1895,8 +1892,8 @@ public class DatabaseManager {
         
         try
         {
-            PreparedStatement st = connection.prepareStatement("INSERT INTO project(name, "
-                    + ") VALUES(?)");
+            PreparedStatement st = connection.prepareStatement("INSERT INTO project(name) "
+                    + " VALUES(?)");
            
             st.setString(1, _project.getName());
            
@@ -1966,7 +1963,7 @@ public class DatabaseManager {
         try
         {
             PreparedStatement st = connection.prepareStatement("DELETE FROM project"
-                    + "WHERE id = ?");
+                    + " WHERE id = ?");
             
             st.setInt(1, _id);
             
@@ -2047,7 +2044,7 @@ public class DatabaseManager {
         try
         {
             PreparedStatement st = connection.prepareStatement("INSERT INTO system_notification"
-                    + "(message, type) VALUES(?, ?)");
+                    + " (message, type) VALUES(?, ?)");
            
             st.setString(1, _systemNotification.getMessage());
             st.setString(2, _systemNotification.getType().toString().toUpperCase());
@@ -2120,7 +2117,7 @@ public class DatabaseManager {
         try
         {
             PreparedStatement st = connection.prepareStatement("DELETE FROM system_notification"
-                    + "WHERE id = ?");
+                    + " WHERE id = ?");
             
             st.setInt(1, _id);
             
@@ -2185,7 +2182,7 @@ public class DatabaseManager {
         try
         {
             PreparedStatement st = connection.prepareStatement("INSERT INTO tax"
-                    + "(amount, type, \"systemFlag\") VALUES(?, ?, ?)");
+                    + " (amount, type, \"systemFlag\") VALUES(?, ?, ?)");
            
             st.setFloat(1, _tax.getAmount());
             st.setString(2, _tax.getType());
@@ -2260,7 +2257,7 @@ public class DatabaseManager {
         try
         {
             PreparedStatement st = connection.prepareStatement("DELETE FROM tax"
-                    + "WHERE id = ?");
+                    + " WHERE id = ?");
             
             st.setInt(1, _id);
             
