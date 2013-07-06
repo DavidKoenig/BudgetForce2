@@ -22,33 +22,33 @@ import java.sql.Date;
  */
 /*
  * @sources
- *  http://ohdevon.wordpress.com/2011/09/19/postgresql-to-netbeans-2/
+ * http://ohdevon.wordpress.com/2011/09/19/postgresql-to-netbeans-2/
+ * http://www.postgresql.org/docs/9.1/static/
  */
 
 
 public class DatabaseManager {
+       
     
-    private Connection connection                       = null;
-    private static final String s_DatabaseUser          = "postgres";
-    private static final String s_DatabasePw            = "pgr4";
-    private static final String s_Url                   = "jdbc:postgresql://localhost:5432/BudgetForce";
-    private static final String s_Driver                = "org.postgresql.Driver";
-    private static DatabaseManager s_SingletonManager   = null;     
-    
-    
+    // <editor-fold defaultstate="collapsed" desc="constructor">
     private DatabaseManager()
     {
         this.establishConnection();
     }
+    // </editor-fold>
+   
     
+    // <editor-fold defaultstate="collapsed" desc="destructor">
     //close connection when singleton will be destroyed
     @Override
     protected void finalize()
     {
         this.closeConnection();
     }
+    // </editor-fold>
     
-    //Singleton
+    
+    // <editor-fold defaultstate="collapsed" desc="singleton">
     public static DatabaseManager getDatabaseManager()
     {
         if (s_SingletonManager == null)
@@ -58,8 +58,10 @@ public class DatabaseManager {
         
         return s_SingletonManager;
     }
+    // </editor-fold>
     
     
+    // <editor-fold defaultstate="collapsed" desc="connection">
     private void establishConnection()
     {
         if (connection != null)
@@ -72,7 +74,7 @@ public class DatabaseManager {
            connection = DriverManager.getConnection(s_Url, s_DatabaseUser, s_DatabasePw);
            
            if (connection != null) {
-               System.out.println("Connecting to database...");
+               System.out.println("Connected to the database");
            }
         } 
         catch(Exception e)
@@ -80,6 +82,7 @@ public class DatabaseManager {
             System.out.println("Problem when connecting to the database");
         }
     }
+    
     
     private void closeConnection()
     {
@@ -91,13 +94,14 @@ public class DatabaseManager {
             }
             catch(Exception e)
             {
-                System.out.println("Problem to close the connection to the database");
+                System.out.println("Problem when closing the connection to the database");
             }
         }
     }
+    // </editor-fold>
     
     
-    //Address stuff
+    // <editor-fold defaultstate="collapsed" desc="address">
     public Address getAddressByID(int _id)
     {  
         ResultSet rs = null;
@@ -113,7 +117,7 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem when getting an address by id from database!");
         }
         
         try 
@@ -153,7 +157,7 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem when filling into Element");
+            System.out.println("Problem when mapping an address by id from database into an instance, result could be null!");
         }
         
         return address;
@@ -174,7 +178,7 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem in selecting an address from database by person id");
         }
         
         try 
@@ -218,7 +222,7 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem when filling into Element");
+            System.out.println("Problem when mapping addresses selected by person id from database to a new instance, result could be null");
         }
         
         return addressArray;
@@ -226,8 +230,7 @@ public class DatabaseManager {
     
     
     public int insertAddress(Address _address)
-    {
-               
+    {        
         ResultSet rs = null;
         int id = 0;
         
@@ -249,7 +252,7 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem in inserting an address into database.");
         }
         
          //get ID
@@ -262,7 +265,7 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem when selecting id from inserted address");
         }
         
         try 
@@ -276,17 +279,15 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem when selecting an Element");
+            System.out.println("Problem when mapping id from inserted address into int value");
         }
-        
         
         return id;
     }
     
     
     public boolean updateAddress(Address _address)
-    {
-             
+    {       
         try
         {
             PreparedStatement st = connection.prepareStatement("UPDATE address SET "
@@ -308,18 +309,16 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem when updating address to the database.");
             return false;
         }
-        
-        
+
         return true;
     }
     
     
     public boolean deleteAddress(Address _address)
     {
-        
         try
         {
             PreparedStatement st = connection.prepareStatement("DELETE FROM address WHERE id = ?");
@@ -330,20 +329,18 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem when deleting an address from database, maybe id not found");
             return false;
         }
-        
-        
+ 
         return true;
     }
+    // </editor-fold>
     
     
-    //Budget stuff
+    // <editor-fold defaultstate="collapsed" desc="budget">
     public Budget getBudgetByID(int _id)
-    {
-        
-        
+    {  
         Budget budget = new Budget();
         ResultSet rs = null;
         
@@ -357,7 +354,7 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem when selecting a budget by id from database");
         }
         
         try 
@@ -376,14 +373,13 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem when filling into Element");
+            System.out.println("Problem mapping budget selected by id from database to instance, result could be null");
         }
-        
-        
+         
         return budget;
     }
+         
     
-        
     public ArrayList<Budget> getBudgetByPersonID(int _personID)
     {
         ArrayList arrayBudget = new ArrayList<Budget>();
@@ -399,14 +395,14 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem when selecting budgets from a person by id from database");
         }
         
         try 
         {
             while(rs.next())
             {  
-                Budget budget         = new Budget();
+                Budget budget = new Budget();
                 
                 budget.setBudgetId(rs.getInt("id"));
                 budget.setCurrency(rs.getString("currency"));
@@ -422,7 +418,7 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem when filling into Element");
+            System.out.println("Problem when mapping budget by person id from database, result could be null.");
         }
         
         
@@ -445,14 +441,14 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem selecting budgets by project id from database");
         }
         
         try 
         {
             while(rs.next())
             {  
-                Budget budget         = new Budget();
+                Budget budget = new Budget();
                 
                 budget.setBudgetId(rs.getInt("id"));
                 budget.setCurrency(rs.getString("currency"));
@@ -468,7 +464,7 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem when filling into Element");
+            System.out.println("Problem when mapping budget by project id to instance, result could be null");
         }
         
         
@@ -491,14 +487,14 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem selecting subbudget from database");
         }
         
         try 
         {
             while(rs.next())
             {  
-                Budget budget         = new Budget();
+                Budget budget = new Budget();
                 
                 budget.setBudgetId(rs.getInt("id"));
                 budget.setCurrency(rs.getString("currency"));
@@ -514,18 +510,15 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem when filling into Element");
+            System.out.println("Problem when mapping subbudget to database, result could be null");
         }
-        
         
         return arrayBudget;
     }
     
     
     public int insertBudget(Budget _budget)
-    {
-        
-        
+    {        
         ResultSet rs    = null;
         int id          = 0;
         
@@ -546,7 +539,7 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem when inserting budget into database");
         }
         
         //get ID
@@ -559,7 +552,7 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem when selecting inserted budget id from database ");
         }
         
         try 
@@ -573,9 +566,8 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem when selecting an Element");
+            System.out.println("Problem when mapping inserted budget id");
         }
-        
         
         return id;
     }
@@ -602,10 +594,9 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem when updating budget to database");
             return false;
         }
-        
         
         return true;
     }
@@ -623,19 +614,18 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem when deleting budget from database");
             return false;
         }
         
         return true;
     }
+    // </editor-fold>
     
     
-    //Category stuff
+    // <editor-fold defaultstate="collapsed" desc="category">
     public Category getCategoryByID(int _id)
     {
-        
-        
         ResultSet rs = null;
         
         Category category = new Category();
@@ -649,7 +639,7 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem when selecting category by id from database");
         }
         
         try {
@@ -662,18 +652,15 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem when filling into Element");
+            System.out.println("Problem when mapping category selected by id, to an instance");
         }
-        
-        
         
         return category;
     }
     
+    
     public int insertCategory(Category _category)
     {
-        
-        
         ResultSet rs    = null;
         int             id = 0;
         
@@ -689,7 +676,7 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem when inserting category into database");
         }
         
         //get ID
@@ -702,7 +689,7 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem when selecting id from inserted category");
         }
         
         try 
@@ -716,12 +703,13 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem when selecting an Element");
+            System.out.println("Problem when mapping inserted category id");
         }
         
         
         return id;
     }
+    
     
     public boolean updateCategory(Category _category)
     {
@@ -740,19 +728,16 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem when updating category to database");
             return false;
         }
         
-        
         return true;
     }
-    
+     
     
     public boolean deleteCategory(int _id)
     {
-        
-
         try
         {
             PreparedStatement st = connection.prepareStatement("DELETE FROM category WHERE id = ?");
@@ -763,20 +748,18 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem deleting category from database");
             return false;
         }
         
-        
         return true;
     }
+    // </editor-fold>
     
     
-    //Income stuff
+    // <editor-fold defaultstate="collapsed" desc="income">
     public Income getIncomeByID(int _id)
     {
-        
-        
         ResultSet rs = null;
         
         Income income = new Income();
@@ -790,10 +773,11 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem selecting income by id from database");
         }
         
-        try {
+        try 
+        {
             while(rs.next())
             {  
                 income.setId(rs.getInt("id"));
@@ -810,19 +794,15 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem when filling into Element");
+            System.out.println("Problem when mapping income by id to instance, result could be null");
         }
-        
-        
-        
+
         return income;
     }
     
     
     public ArrayList<Income> getIncomeByPersonID(int _personID)
     {
-        
-        
         ResultSet rs = null;
         
         ArrayList incomeArray = new ArrayList<Income>();
@@ -836,7 +816,7 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem when searching in the database");
+            System.out.println("Problem when selecting income by person id from database");
         }
         
         try {
@@ -860,18 +840,15 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem when filling into Element");
+            System.out.println("Problem when mapping income by person id to instance, result could be null");
         }
-         
-        
+
         return incomeArray;
     }
-    
+     
     
     public ArrayList<Income> getIncomeByIncomeID(int _incomeID)
     {
-        
-        
         ResultSet rs = null;
         
         ArrayList incomeArray = new ArrayList<Income>();
@@ -885,7 +862,7 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem when searching in the database");
+            System.out.println("Problem when selecting subincome database");
         }
         
         try {
@@ -909,17 +886,15 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem when filling into Element");
+            System.out.println("Problem when mapping subincome, result could be null");
         }
-         
-        
+ 
         return incomeArray;
     }
     
+    
     public int insertIncome(Income _income)
-    {
-        
-        
+    {   
         ResultSet rs    = null;
         int id          = 0;
         
@@ -944,7 +919,7 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem when inserting income into database");
         }
         
         //get ID
@@ -957,7 +932,7 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem selecting income from inserted id from database");
         }
         
         try 
@@ -971,18 +946,15 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem when selecting an Element");
+            System.out.println("Problem when mapping inserted income id");
         }
-        
-        
+
         return id;
     }
     
     
     public boolean updateIncome(Income _income)
     {
-        
-        
         try
         {
             PreparedStatement st = connection.prepareStatement("UPDATE income"
@@ -1004,10 +976,9 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem when updating income to database");
             return false;
         }
-        
         
         return true;
     }
@@ -1015,8 +986,6 @@ public class DatabaseManager {
     
     public boolean deleteIncome(int _id)
     {
-        
-        
         try
         {
             PreparedStatement st = connection.prepareStatement("DELETE FROM income"
@@ -1029,20 +998,18 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem deleting income from database");
             return false;
         }
-        
-        
+
         return true;
     }
+    // </editor-fold>
+       
     
-            
-    //Login stuff
+    // <editor-fold defaultstate="collapsed" desc="login">
     public Login getLoginByUsername(String _username)
     {
-        
-        
         Login login = new Login();
         ResultSet rs = null;
         
@@ -1056,7 +1023,7 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem when selecting login by username from database");
         }
         
         try 
@@ -1085,18 +1052,15 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem when filling into Element");
+            System.out.println("Problem mapping login selected by username, result could be null");
         }
-        
-        
+
         return login;
     }
     
     
     public Login getLoginByPersonID(int _personID)
-    {
-        
-        
+    { 
         Login login = new Login();
         ResultSet rs = null;
         
@@ -1110,7 +1074,7 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem selecting login by person id from database");
         }
         
         try 
@@ -1139,18 +1103,15 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem when filling into Element");
+            System.out.println("Problem when mapping login selected by person id, result could be null");
         }
-        
-        
+
         return login;
     }
-    
+       
     
     public int insertLogin(Login _login)
     {
-        
-        
         ResultSet rs    = null;
         int id          = 0;
         
@@ -1170,7 +1131,7 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem inserting login into database");
         }
         
         //get ID
@@ -1183,7 +1144,7 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem when selecting id from inserted login from database");
         }
         
         try 
@@ -1197,18 +1158,15 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem when selecting an Element");
+            System.out.println("Problem when mapping id from inserted login");
         }
-        
-        
+
         return id;
     }
     
     
     public boolean updateLogin(Login _login) //username can not be changed 
     {
-        
-        
         try
         {
             PreparedStatement st = connection.prepareStatement("UPDATE login"
@@ -1226,19 +1184,16 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem when updatin login to database");
             return false;
         }
-        
-        
+
         return true;
     }
-    
+      
     
     public boolean updateLoginPassword(String _username, String _password)
     {
-        
-        
         try
         {
             PreparedStatement st = connection.prepareStatement("UPDATE login"
@@ -1252,19 +1207,16 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem updating login password to database");
             return false;
         }
-        
-        
+
         return true;
     }
-    
+     
     
     public boolean updateLoginSecurityQuestion(String _username, String _securityQuestion)
     {
-        
-        
         try
         {
             PreparedStatement st = connection.prepareStatement("UPDATE login"
@@ -1278,19 +1230,16 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem when updating security question from login to database");
             return false;
         }
-        
-        
+
         return true;
     }
-    
+      
     
     public boolean deleteLogin(String _username)
     {
-        
-        
         try
         {
             PreparedStatement st = connection.prepareStatement("DELETE FROM login"
@@ -1303,20 +1252,18 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem when deleting login from database");
             return false;
         }
-        
-        
+
         return true;
     }
+    // </editor-fold>
     
     
-    //Outgoing Stuff
+    // <editor-fold defaultstate="collapsed" desc="outgoing">
     public Outgoing getOutgoingByID(int _id)
     {
-        
-        
         Outgoing outgoing = new Outgoing();
         ResultSet rs = null;
         
@@ -1330,7 +1277,7 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem when selecting outgoing by id from database");
         }
         
         try 
@@ -1351,17 +1298,15 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem when filling into Element");
+            System.out.println("Problem mapping outgoing selected by id, result could be null");
         }
-        
-        
+
         return outgoing;
     }
     
+    
     public ArrayList<Outgoing> getOutgoingByBudgetID(int _budgetID)
     {
-        
-        
         ArrayList arrayOutgoing = new ArrayList<Outgoing>();
         
         ResultSet rs = null;
@@ -1376,7 +1321,7 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem selecting outgoings by budget from database");
         }
         
         try 
@@ -1401,17 +1346,15 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem when filling into Element");
+            System.out.println("Problem mapping outgoings selected by a budget, result could be null");
         }
-        
         
         return arrayOutgoing;
     }
     
+    
     public ArrayList<Outgoing> getOutgoingByCategoryID(int _categoryID)
     {
-        
-        
         ArrayList arrayOutgoing = new ArrayList<Outgoing>();
         
         ResultSet rs = null;
@@ -1426,7 +1369,7 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem selecting outgoings by category from database");
         }
         
         try 
@@ -1451,17 +1394,15 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem when filling into Element");
+            System.out.println("Problem mapping outgoings selected by category, result could be null");
         }
-        
-        
+
         return arrayOutgoing;
     }
     
+    
     public int insertOutgoing(Outgoing _outgoing)
     {
-        
-        
         ResultSet rs    = null;
         int id          = 0;
         
@@ -1484,7 +1425,7 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem when inserting outgoing into database");
         }
         
         //get ID
@@ -1497,7 +1438,7 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem selecting id from inserted outgoing from database");
         }
         
         try 
@@ -1511,17 +1452,15 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem when selecting an Element");
+            System.out.println("Problem mapping id from inserted outoging");
         }
-        
-        
+
         return id;
     }
     
+    
     public boolean updateOutgoing(Outgoing _outgoing)
     {
-        
-        
         try
         {
             PreparedStatement st = connection.prepareStatement("UPDATE outgoing SET amount = ?, "
@@ -1542,18 +1481,16 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem updating outgoing to database");
             return false;
         }
-        
-        
+
         return true;
     }
     
+    
     public boolean deleteOutgoing(int _id)
     {
-        
-        
         try
         {
             PreparedStatement st = connection.prepareStatement("DELETE FROM outgoing"
@@ -1566,20 +1503,19 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem deleting outgoing from database");
             return false;
         }
         
         
         return true;
     }
+    // </editor-fold>
     
     
-    //OutgoingHasTax stuff
+    // <editor-fold defaultstate="collapsed" desc="outgoingHasTax">
     public OutgoingHasTax getOutgoingHasTaxByID(int _outgoingID, int _taxID)
     {
-        
-        
         OutgoingHasTax oht = new OutgoingHasTax();
         ResultSet rs = null;
         
@@ -1595,7 +1531,7 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem selecting outgoing has tax by id from database");
         }
         
         try 
@@ -1611,18 +1547,15 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem when filling into Element");
+            System.out.println("Problem when mapping outgoing has tax selected by id to an instance, result could be null");
         }
-        
-        
+
         return oht;
     }
-    
+     
     
     public ArrayList<OutgoingHasTax> getOutgoingHasTaxByOutgoingID(int _outgoingID)
     {
-        
-        
         ArrayList arrayOht = new ArrayList<OutgoingHasTax>();
         
         ResultSet rs = null;
@@ -1637,7 +1570,7 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem when selecting ougoing has tax by outgoing id from database");
         }
         
         try 
@@ -1657,18 +1590,15 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem when filling into Element");
+            System.out.println("Problem when mapping ougoing has tax selected by outgoing id, result could be null");
         }
-        
-        
+
         return arrayOht;
     }
-    
+       
     
     public int insertOutgoingHasTaxByID(OutgoingHasTax _outgoingHasTax)
     {
-        
-        
         ResultSet rs    = null;
         int id          = 0;
         
@@ -1687,7 +1617,7 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem when inserting outgoing has tax into database");
         }
         
         //get ID
@@ -1700,7 +1630,7 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem selecting id from inserted outgoing has tax from database");
         }
         
         try 
@@ -1714,17 +1644,15 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem when selecting an Element");
+            System.out.println("Problem when mapping id from inserted outgoing has tax");
         }
-        
-        
+
         return id;
     }
     
+    
     public boolean updateOutgoingHasTax(OutgoingHasTax _outgoingHasTax)
     {
-        
-        
         try
         {
             PreparedStatement st = connection.prepareStatement("UPDATE outgoing_has_tax "
@@ -1740,18 +1668,16 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem when updating outgoing has tax to database");
             return false;
         }
-        
-        
+
         return true;
     }
     
+    
     public boolean deleteOutgoingHasTaxByID(int _outgoingID, int _taxID)
     {
-        
-        
         try
         {
             PreparedStatement st = connection.prepareStatement("DELETE FROM person"
@@ -1765,20 +1691,18 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem when deleting outgoing has tax from database");
             return false;
         }
-        
-        
+
         return true;
     }
+    // </editor-fold>
     
     
-    //Person stuff
+    // <editor-fold defaultstate="collapsed" desc="person">
     public Person getPersonByID(int _id)
     {
-        
-        
         Person person = new Person();
         ResultSet rs = null;
         
@@ -1792,7 +1716,7 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem selecting person by id from database");
         }
         
         try 
@@ -1811,38 +1735,38 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem when filling into Element");
+            System.out.println("Problem mapping selected person by id, result could be null");
         }
-        
-        
+
         return person;
     }
-    
+      
     
     public int insertPerson(Person _person)     //returns the id of the inserted person
-    {
-        
-        
+    {       
         ResultSet rs = null;
         int id = 0;
         
         try
         {
             PreparedStatement st = connection.prepareStatement("INSERT INTO person(\"firstName\", "
-                    + "\"lastName\") VALUES(?, ?)");
+                    + "\"lastName\", email, phone1, phone2) VALUES(?, ?, ?, ?, ?)");
            
             st.setString(1, _person.getFirstName());
             st.setString(2, _person.getLastName());
+            st.setString(3, _person.getEmail());
+            st.setString(4, _person.getPhone1());
+            st.setString(5, _person.getPhone2());
            
             st.executeUpdate();
         }
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            e.printStackTrace();
+            System.out.println("Problem inserting person into database");
         }
-        
-        
+
         //get ID
         try
         {
@@ -1853,7 +1777,8 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            
+            System.out.println("Problem selecting id from inserted person from database");
         }
         
         try 
@@ -1867,49 +1792,43 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem when filling into Element");
+            System.out.println("Problem mapping id from inserted person");
         }
-        
-        
-        
+
         return id;
     }
-    
+      
     
     public boolean updatePerson(Person _person)
     {
-        
-        
         try
         {
             PreparedStatement st = connection.prepareStatement("UPDATE person SET \"firstName\" = ?, "
                     + " \"lastName\" = ?, phone1 = ?, phone2 = ?, email = ? WHERE id = ?");
            
-            st.setInt(1, _person.getId());
-            st.setString(2, _person.getFirstName());
-            st.setString(3, _person.getLastName());
-            st.setString(4, _person.getPhone1());
-            st.setString(5, _person.getPhone2());
-            st.setString(6, _person.getEmail());
+      
+            st.setString(1, _person.getFirstName());
+            st.setString(2, _person.getLastName());
+            st.setString(3, _person.getPhone1());
+            st.setString(4, _person.getPhone2());
+            st.setString(5, _person.getEmail());
+            st.setInt(6, _person.getId());
            
             st.executeUpdate();
         }
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem updating person to database");
             return false;
         }
-        
-        
+ 
         return true;
     }
+       
     
-                 
     public boolean deletePerson(int _id)
-    {
-        
-        
+    { 
         try
         {
             PreparedStatement st = connection.prepareStatement("DELETE FROM person"
@@ -1922,20 +1841,18 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem deleting person from database");
             return false;
         }
-        
-        
+
         return true;
     }
+     // </editor-fold>
     
     
-    //Project stuff
+    // <editor-fold defaultstate="collapsed" desc="project">
     public Project getProjectByID(int _id)
     {
-        
-        
         Project project = new Project();
         ResultSet rs = null;
         
@@ -1949,7 +1866,7 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem selecting project by id from database");
         }
         
         try 
@@ -1964,18 +1881,15 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem when filling into Element");
+            System.out.println("Problem mapping selected project by id, result could be null");
         }
-        
-        
+
         return project;
     }
-    
+     
     
     public int insertProject(Project _project)
     {
-        
-        
         ResultSet rs    = null;
         int id          = 0;
         
@@ -1991,7 +1905,7 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem inserting project into database");
         }
         
         //get ID
@@ -2004,7 +1918,7 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem selecting id from inserted project from database");
         }
         
         try 
@@ -2018,17 +1932,15 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem when selecting an Element");
+            System.out.println("Problem mapping id from inserted project");
         }
-        
         
         return id;
     }
     
+    
     public boolean updateProject(Project _project)
     {
-        
-        
         try
         {
             PreparedStatement st = connection.prepareStatement("UPDATE project SET name = ?, "
@@ -2041,18 +1953,16 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem updating project to database");
             return false;
         }
-        
-        
+
         return true;
     }
     
+    
     public boolean deleteProject(int _id)
     {
-        
-        
         try
         {
             PreparedStatement st = connection.prepareStatement("DELETE FROM project"
@@ -2065,20 +1975,18 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem deleting project from database");
             return false;
         }
-        
-        
+ 
         return true;
     }
+    // </editor-fold>
     
     
-    //SystemNotification stuff
+    // <editor-fold defaultstate="collapsed" desc="systemNotifcation">
     public SystemNotification getSystemNotificationByID(int _id)
     {
-        
-        
         SystemNotification notification = new SystemNotification();
         ResultSet rs = null;
         
@@ -2092,7 +2000,7 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem selecting system notification by id from database");
         }
         
         try 
@@ -2124,17 +2032,15 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem when filling into Element");
+            System.out.println("Problem mapping system notification selected by id, result could be null");
         }
-        
-        
+
         return notification;
     }
     
+    
     public int insertSystemNotification(SystemNotification _systemNotification)
     {
-        
-        
         ResultSet rs    = null;
         int id          = 0;
         
@@ -2151,7 +2057,7 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem inserting system notification into database");
         }
         
         //get ID
@@ -2164,7 +2070,7 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem selecting id from inserted system notification from database");
         }
         
         try 
@@ -2178,17 +2084,15 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem when selecting an Element");
+            System.out.println("Problem mapping selected id from inserted system notification");
         }
-        
-        
+
         return id;
     }
     
+    
     public boolean updateSystemNotification(SystemNotification _systemNotification)
     {
-        
-        
         try
         {
             PreparedStatement st = connection.prepareStatement("UPDATE system_notification"
@@ -2203,18 +2107,16 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem updating system notification to database");
             return false;
         }
-        
-        
+
         return true;
     }
     
+    
     public boolean deleteSystemNotification(int _id)
     {
-        
-        
         try
         {
             PreparedStatement st = connection.prepareStatement("DELETE FROM system_notification"
@@ -2227,20 +2129,18 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem deleting system notification from database");
             return false;
         }
-        
-        
+
         return true;
     }
+    // </editor-fold>
     
     
-    //Tax stuff
+    // <editor-fold defaultstate="collapsed" desc="Tax">
     public Tax getTaxByID(int _id)
     {
-        
-        
         Tax tax = new Tax();
         ResultSet rs = null;
         
@@ -2254,7 +2154,7 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem selecting tax by id from database");
         }
         
         try 
@@ -2270,17 +2170,15 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem when filling into Element");
+            System.out.println("Problem mapping selected tax by id, result could be null");
         }
-        
-        
+
         return tax;
     }
     
+    
     public int insertTax(Tax _tax)
     {
-        
-        
         ResultSet rs    = null;
         int id          = 0;
                 
@@ -2298,7 +2196,7 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem when inserting tax into database");
         }
         
         //get ID
@@ -2311,7 +2209,7 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem selecting id from inserted tax from database");
         }
         
         try 
@@ -2325,17 +2223,15 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem when selecting an Element");
+            System.out.println("Problem mapping id from inserted tax");
         }
-        
-        
+
         return id;
     }
     
+    
     public boolean updateTax(Tax _tax)
     {
-        
-        
         try
         {
             PreparedStatement st = connection.prepareStatement("UPDATE tax"
@@ -2351,18 +2247,16 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem updating tax to database");
             return false;
         }
-        
-        
+
         return true;
     }
     
+    
     public boolean deleteTax(int _id)
     {
-        
-        
         try
         {
             PreparedStatement st = connection.prepareStatement("DELETE FROM tax"
@@ -2375,12 +2269,18 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem in searching the database");
+            System.out.println("Problem deleting tax from database");
             return false;
         }
-        
-        
+
         return true;
     }
+    // </editor-fold>
     
+    private Connection connection                       = null;
+    private static final String s_DatabaseUser          = "postgres";
+    private static final String s_DatabasePw            = "pgr4";
+    private static final String s_Url                   = "jdbc:postgresql://localhost:5432/BudgetForce";
+    private static final String s_Driver                = "org.postgresql.Driver";
+    private static DatabaseManager s_SingletonManager   = null;  
 }
