@@ -9,11 +9,15 @@ import budgetforce.model.Outgoing;
 import budgetforce.model.OutgoingHasTax;
 import budgetforce.model.Tax;
 
+import org.joda.time.Period;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.sql.PreparedStatement;
+import java.sql.Types;  //for setting some columns null, if its necessary
+import javassist.bytecode.analysis.Type;
 // </editor-fold>
 
 /**
@@ -271,7 +275,7 @@ public class DatabaseManager {
         {
             while(rs.next())
             {  
-                id = rs.getInt("id");
+                id = rs.getInt(1);
             }
             rs.close();
         } 
@@ -558,7 +562,7 @@ public class DatabaseManager {
         {
             while(rs.next())
             {  
-                id = rs.getInt("id");
+                id = rs.getInt(1);
             }
             rs.close();
         } 
@@ -695,7 +699,7 @@ public class DatabaseManager {
         {
             while(rs.next())
             {  
-                id = rs.getInt("id");
+                id = rs.getInt(1);
             }
             rs.close();
         } 
@@ -777,15 +781,31 @@ public class DatabaseManager {
         {
             while(rs.next())
             {  
+                Object o = new Object();
+                
                 income.setId(rs.getInt("id"));
                 income.setName(rs.getString("name"));
                 income.setAmount(rs.getFloat("amount"));
-                income.setPeriod(rs.getString("period"));
                 income.setStart(rs.getDate("start"));
-                income.setEnd(rs.getDate("end"));
+                income.setEnd(rs.getDate("ende"));
                 income.setTimestamp(rs.getDate("timestamp"));
                 income.setPersonID(rs.getInt("personID"));
                 income.setIncomeID(rs.getInt("incomeID"));
+                
+                //first map period from database to an Object and then map this Object to an joda Period instance
+                o = rs.getObject("period");
+                
+                try
+                { 
+                    Period period = new Period(o);
+                    //Period period = (Period) o; 
+                    income.setPeriod(period);
+                }
+                
+                catch(Exception e)
+                {
+                    System.out.println("Casting Object to Period failed");
+                }
             }
         } 
         
@@ -820,16 +840,30 @@ public class DatabaseManager {
             while(rs.next())
             {         
                 Income tmpIncome       = new Income();
+                Object o               = new Object();
                 
                 tmpIncome.setId(rs.getInt("id"));
                 tmpIncome.setName(rs.getString("name"));
-                tmpIncome.setAmount(rs.getFloat("amount"));
-                tmpIncome.setPeriod(rs.getString("period"));
+                tmpIncome.setAmount(rs.getFloat("amount"));   
                 tmpIncome.setStart(rs.getDate("start"));
-                tmpIncome.setEnd(rs.getDate("end"));
+                tmpIncome.setEnd(rs.getDate("ende"));
                 tmpIncome.setTimestamp(rs.getDate("timestamp"));
                 tmpIncome.setPersonID(rs.getInt("personID"));
                 tmpIncome.setIncomeID(rs.getInt("incomeID"));
+                
+                //first map period from database to an Object and then map this Object to an joda Period instance
+                o = rs.getObject("period");
+                
+                try
+                { 
+                    Period period = (Period) o; 
+                    tmpIncome.setPeriod(period);
+                }
+                
+                catch(Exception e)
+                {
+                    System.out.println("Casting Object to Period failed");
+                }
        
                 incomeArray.add(tmpIncome);       
             }  
@@ -866,16 +900,30 @@ public class DatabaseManager {
             while(rs.next())
             {         
                 Income tmpIncome       = new Income();
+                Object o               = new Object();
                 
                 tmpIncome.setId(rs.getInt("id"));
                 tmpIncome.setName(rs.getString("name"));
                 tmpIncome.setAmount(rs.getFloat("amount"));
-                tmpIncome.setPeriod(rs.getString("period"));
                 tmpIncome.setStart(rs.getDate("start"));
-                tmpIncome.setEnd(rs.getDate("end"));
+                tmpIncome.setEnd(rs.getDate("ende"));
                 tmpIncome.setTimestamp(rs.getDate("timestamp"));
                 tmpIncome.setPersonID(rs.getInt("personID"));
                 tmpIncome.setIncomeID(rs.getInt("incomeID"));
+                
+                //first map period from database to an Object and then map this Object to an joda Period instance
+                o = rs.getObject("period");
+                
+                try
+                { 
+                    Period period = (Period) o; 
+                    tmpIncome.setPeriod(period);
+                }
+                
+                catch(Exception e)
+                {
+                    System.out.println("Casting Object to Period failed");
+                }
        
                 incomeArray.add(tmpIncome);       
             }  
@@ -898,19 +946,25 @@ public class DatabaseManager {
         try
         {
             PreparedStatement st = connection.prepareStatement("INSERT INTO income(name,"
-                    + " amount, timestamp, period, start, end, \"personID\", \"incomeID\")"
+                    + " amount, timestamp, period, start, ende, \"personID\", \"incomeID\")"
                     + " VALUES(?, ?, ?, ?, ?, ?, ?, ?)");
             
             st.setString(1, _income.getName());
             st.setFloat(2, _income.getAmount());
             st.setDate(3, _income.getTimestamp());
-            st.setString(4, _income.getPeriod());
+            
+            //Object o = (String) _income.getPeriod();
+            //st.setObject(4, o, ); 
+            
             st.setDate(5, _income.getStart());
             st.setDate(6, _income.getEnd());
             st.setInt(7, _income.getPersonID());
-            st.setInt(8, _income.getIncomeID());
-            st.setInt(9, _income.getId());
-           
+            //st.setInt(8, _income.getIncomeID());
+            
+            //if there isnt set any subincome, set the incomeID null, because if it isnt set it will be 0 and 0 != null
+            if (_income.getIncomeID() == 0)     st.setNull(8, Types.BIGINT);  //java sql types, because you have to specify the sql type if you want to set the column null
+            else                                st.setInt(8, _income.getIncomeID());
+            
             st.executeUpdate();
         }
         
@@ -936,7 +990,7 @@ public class DatabaseManager {
         {
             while(rs.next())
             {  
-                id = rs.getInt("id");
+                id = rs.getInt(1);
             }
             rs.close();
         } 
@@ -956,12 +1010,12 @@ public class DatabaseManager {
         {
             PreparedStatement st = connection.prepareStatement("UPDATE income"
                     + " SET name = ?, amount = ?, timestamp = ?, period = ?, start = ?,"
-                    + " end = ?, \"personID\" = ?, \"incomeID\" = ?  WHERE id = ?");
+                    + " ende = ?, \"personID\" = ?, \"incomeID\" = ?  WHERE id = ?");
            
             st.setString(1, _income.getName());
             st.setFloat(2, _income.getAmount());
             st.setDate(3, _income.getTimestamp());
-            st.setString(4, _income.getPeriod());
+            st.setObject(4, _income.getPeriod());
             st.setDate(5, _income.getStart());
             st.setDate(6, _income.getEnd());
             st.setInt(7, _income.getPersonID());
@@ -1117,6 +1171,7 @@ public class DatabaseManager {
             PreparedStatement st = connection.prepareStatement("INSERT INTO login(username,"
                     + " password, \"securityQuestion\", \"personID\", type)"
                     + " VALUES(?, ?, ?, ?, ?)");
+            
             st.setString(1, _login.getUsername());
             st.setString(2, _login.getPassword());
             st.setString(3, _login.getSecurityQuestion());
@@ -1148,7 +1203,7 @@ public class DatabaseManager {
         {
             while(rs.next())
             {  
-                id = rs.getInt("id");
+                id = rs.getInt(1);
             }
             rs.close();
         } 
@@ -1285,7 +1340,7 @@ public class DatabaseManager {
                 outgoing.setAmount(rs.getFloat("amount"));
                 outgoing.setPeriod(rs.getString("period"));
                 outgoing.setStart(rs.getDate("start"));
-                outgoing.setEnd(rs.getDate("end"));
+                outgoing.setEnd(rs.getDate("ende"));
                 outgoing.setTimeStamp(rs.getDate("timestamp"));
                 outgoing.setBudgetId(rs.getInt("budgetID"));
                 outgoing.setCategoryId(rs.getInt("categoryID"));
@@ -1331,7 +1386,7 @@ public class DatabaseManager {
                 outgoing.setAmount(rs.getFloat("amount"));
                 outgoing.setPeriod(rs.getString("period"));
                 outgoing.setStart(rs.getDate("start"));
-                outgoing.setEnd(rs.getDate("end"));
+                outgoing.setEnd(rs.getDate("ende"));
                 outgoing.setTimeStamp(rs.getDate("timestamp"));
                 outgoing.setBudgetId(rs.getInt("budgetID"));
                 outgoing.setCategoryId(rs.getInt("categoryID"));
@@ -1379,7 +1434,7 @@ public class DatabaseManager {
                 outgoing.setAmount(rs.getFloat("amount"));
                 outgoing.setPeriod(rs.getString("period"));
                 outgoing.setStart(rs.getDate("start"));
-                outgoing.setEnd(rs.getDate("end"));
+                outgoing.setEnd(rs.getDate("ende"));
                 outgoing.setTimeStamp(rs.getDate("timestamp"));
                 outgoing.setBudgetId(rs.getInt("budgetID"));
                 outgoing.setCategoryId(rs.getInt("categoryID"));
@@ -1406,7 +1461,7 @@ public class DatabaseManager {
         try
         {
             PreparedStatement st = connection.prepareStatement("INSERT INTO outgoing(amount,"
-                    + " period, start, end, timestamp, \"budgetID\", \"categoryID\") "
+                    + " period, start, ende, timestamp, \"budgetID\", \"categoryID\") "
                     + " VALUES(?, ?, ?, ?, ?, ?)");
            
             st.setFloat(1, _outgoing.getAmount());
@@ -1442,7 +1497,7 @@ public class DatabaseManager {
         {
             while(rs.next())
             {  
-                id = rs.getInt("id");
+                id = rs.getInt(1);
             }
             rs.close();
         } 
@@ -1461,7 +1516,7 @@ public class DatabaseManager {
         try
         {
             PreparedStatement st = connection.prepareStatement("UPDATE outgoing SET amount = ?, "
-                    + " period = ?, start = ?, end = ?, timestamp = ?, \"budgetID\" = ?,"
+                    + " period = ?, start = ?, ende = ?, timestamp = ?, \"budgetID\" = ?,"
                     + " \"categoryID\" = ? WHERE id = ?");
            
             st.setFloat(1, _outgoing.getAmount());
@@ -1634,7 +1689,7 @@ public class DatabaseManager {
         {
             while(rs.next())
             {  
-                id = rs.getInt("id");
+                id = rs.getInt(1);
             }
             rs.close();
         } 
@@ -1760,7 +1815,6 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            e.printStackTrace();
             System.out.println("Problem inserting person into database");
         }
 
@@ -1782,7 +1836,7 @@ public class DatabaseManager {
         {
             while(rs.next())
             {  
-                id = rs.getInt("id");
+                id = rs.getInt(1);
             }
             rs.close();
         } 
@@ -1922,7 +1976,7 @@ public class DatabaseManager {
         {
             while(rs.next())
             {  
-                id = rs.getInt("id");
+                id = rs.getInt(1);
             }
             rs.close();
         } 
@@ -2074,7 +2128,7 @@ public class DatabaseManager {
         {
             while(rs.next())
             {  
-                id = rs.getInt("id");
+                id = rs.getInt(1);
             }
             rs.close();
         } 
@@ -2213,7 +2267,7 @@ public class DatabaseManager {
         {
             while(rs.next())
             {  
-                id = rs.getInt("id");
+                id = rs.getInt(1);
             }
             rs.close();
         } 

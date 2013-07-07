@@ -34,7 +34,7 @@ public class ProjectResource {
     @GET
     @Path("{id}")
     @Produces("application/json")
-    public Project getProject(@PathParam("id") Integer _Id) 
+    public Project getProjectById(@PathParam("id") Integer _Id) 
     {
         Project project = new Project();
         
@@ -43,6 +43,7 @@ public class ProjectResource {
         return project;
     }
 
+    //post to create a new entry
     @POST
     @Consumes("application/json")
     @Produces("application/json")
@@ -53,6 +54,7 @@ public class ProjectResource {
         return Response.status(201).entity(_Project).build();
     }
     
+    //put for updating an entry
     @PUT
     @Path("{id}")
     @Consumes("application/json")

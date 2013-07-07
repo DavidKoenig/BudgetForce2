@@ -2,12 +2,14 @@
 package budgetforce.model;
 
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author David
  */
+@XmlRootElement
 public class Project {
 
     //---------------------------------------------------

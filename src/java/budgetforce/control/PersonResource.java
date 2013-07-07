@@ -34,7 +34,7 @@ public class PersonResource {
     @GET
     @Path("{id}")
     @Produces("application/json")
-    public Person getPerson(@PathParam("id") Integer _Id) 
+    public Person getPersonById(@PathParam("id") Integer _Id) 
     {
         Person person = new Person();
         
@@ -43,16 +43,20 @@ public class PersonResource {
         return person;
     }
 
+    //post for creating a new entry
     @POST
     @Consumes("application/json")
     @Produces("application/json")
     public Response postPerson(Person _Person) 
     {     
-        DatabaseManager.getDatabaseManager().insertPerson(_Person);
+        int id = DatabaseManager.getDatabaseManager().insertPerson(_Person);
+        
+        _Person.setId(id);
         
         return Response.status(201).entity(_Person).build();
     }
     
+    //put for updating an entry
     @PUT
     @Path("{id}")
     @Consumes("application/json")
