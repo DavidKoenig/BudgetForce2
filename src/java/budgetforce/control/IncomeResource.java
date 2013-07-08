@@ -4,6 +4,7 @@ package budgetforce.control;
 // <editor-fold defaultstate="collapsed" desc="imports">
 import budgetforce.model.Income;
 import budgetforce.model.DatabaseManager;
+import budgetforce.model.EPeriod;
 
 import javax.ws.rs.core.Response;
 

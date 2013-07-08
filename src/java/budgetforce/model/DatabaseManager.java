@@ -2,14 +2,9 @@
 package budgetforce.model;
 
 // <editor-fold defaultstate="collapsed" desc="imports">
-import budgetforce.model.Budget;
-import budgetforce.model.Income;
-import budgetforce.model.Login;
-import budgetforce.model.Outgoing;
-import budgetforce.model.OutgoingHasTax;
-import budgetforce.model.Tax;
 
 import org.joda.time.Period;
+import org.joda.time.format.PeriodFormatter;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -17,7 +12,8 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.sql.PreparedStatement;
 import java.sql.Types;  //for setting some columns null, if its necessary
-import javassist.bytecode.analysis.Type;
+import org.joda.time.format.PeriodFormatterBuilder;
+
 // </editor-fold>
 
 /**
@@ -100,6 +96,109 @@ public class DatabaseManager {
                 System.out.println("Problem when closing the connection to the database");
             }
         }
+    }
+    // </editor-fold>
+    
+    
+    // <editor-fold defaultstate="collapsed" desc="period">
+    public EPeriod getPeriodByID(int _Id)
+    {
+        ResultSet rs        = null;
+        EPeriod period      = null;
+        
+        try
+        {
+            //find out the name of the period which belongs to the id
+            PreparedStatement st = connection.prepareStatement("SELECT * FROM period WHERE id = ?");
+            st.setInt(1, _Id);
+            rs = st.executeQuery();
+        }
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem selecting period by id from database");
+        }
+        
+        try 
+        {
+            while(rs.next())
+            {  
+                String stringPeriod = rs.getString("name");
+                stringPeriod.toUpperCase();
+                
+                //find out which period comes from database and map it to an instance 
+                if (stringPeriod.equals(EPeriod.ONCE.name()))
+                {
+                    period = EPeriod.ONCE;
+                }
+                
+                else if (stringPeriod.equals(EPeriod.HOUR.name()))
+                {
+                    period = EPeriod.HOUR;
+                }
+                
+                else if (stringPeriod.equals(EPeriod.DAY.name()))
+                {
+                    period = EPeriod.DAY;
+                }
+                
+                else if (stringPeriod.equals(EPeriod.MONTH.name()))
+                {
+                    period = EPeriod.MONTH;
+                }
+                
+                else if (stringPeriod.equals(EPeriod.QUARTER.name()))
+                {
+                    period = EPeriod.QUARTER;
+                }
+                
+                else if (stringPeriod.equals(EPeriod.YEAR.name()))
+                {
+                    period = EPeriod.YEAR;
+                }       
+            }
+        }
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem when mapping period by id to instance, result could be null");
+        }
+  
+        return period;
+    }
+    
+    public int getPeriodID(EPeriod _Period)
+    {
+        ResultSet rs        = null;
+        int periodId        = 0;
+        
+        try
+        {
+            //find out the name of the period which belongs to the id
+            PreparedStatement st = connection.prepareStatement("SELECT * FROM period WHERE name = ?");
+            st.setString(1, _Period.name());
+            rs = st.executeQuery();
+        }
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem selecting period id from database");
+        }
+        
+        try 
+        {
+            while(rs.next())
+            {  
+               periodId = rs.getInt("id");
+            }
+        }
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem when mapping periodId by id to int, result could be null");
+        }
+  
+        return periodId;
     }
     // </editor-fold>
     
@@ -761,9 +860,8 @@ public class DatabaseManager {
     // <editor-fold defaultstate="collapsed" desc="income">
     public Income getIncomeByID(int _id)
     {
-        ResultSet rs = null;
-        
-        Income income = new Income();
+        ResultSet rs        = null;
+        Income income       = new Income();
         
         try
         {
@@ -781,8 +879,6 @@ public class DatabaseManager {
         {
             while(rs.next())
             {  
-                Object o = new Object();
-                
                 income.setId(rs.getInt("id"));
                 income.setName(rs.getString("name"));
                 income.setAmount(rs.getFloat("amount"));
@@ -791,23 +887,9 @@ public class DatabaseManager {
                 income.setTimestamp(rs.getDate("timestamp"));
                 income.setPersonID(rs.getInt("personID"));
                 income.setIncomeID(rs.getInt("incomeID"));
-                
-                //first map period from database to an Object and then map this Object to an joda Period instance
-                o = rs.getObject("period");
-                
-                try
-                { 
-                    Period period = new Period(o);
-                    //Period period = (Period) o; 
-                    income.setPeriod(period);
-                }
-                
-                catch(Exception e)
-                {
-                    System.out.println("Casting Object to Period failed");
-                }
+                income.setPeriod(this.getPeriodByID(rs.getInt("period_id"))); 
             }
-        } 
+        }
         
         catch(Exception e)
         {
@@ -821,7 +903,6 @@ public class DatabaseManager {
     public ArrayList<Income> getIncomeByPersonID(int _personID)
     {
         ResultSet rs = null;
-        
         ArrayList incomeArray = new ArrayList<Income>();
         
         try
@@ -840,7 +921,6 @@ public class DatabaseManager {
             while(rs.next())
             {         
                 Income tmpIncome       = new Income();
-                Object o               = new Object();
                 
                 tmpIncome.setId(rs.getInt("id"));
                 tmpIncome.setName(rs.getString("name"));
@@ -850,21 +930,8 @@ public class DatabaseManager {
                 tmpIncome.setTimestamp(rs.getDate("timestamp"));
                 tmpIncome.setPersonID(rs.getInt("personID"));
                 tmpIncome.setIncomeID(rs.getInt("incomeID"));
-                
-                //first map period from database to an Object and then map this Object to an joda Period instance
-                o = rs.getObject("period");
-                
-                try
-                { 
-                    Period period = (Period) o; 
-                    tmpIncome.setPeriod(period);
-                }
-                
-                catch(Exception e)
-                {
-                    System.out.println("Casting Object to Period failed");
-                }
-       
+                tmpIncome.setPeriod(this.getPeriodByID(rs.getInt("period_id"))); 
+
                 incomeArray.add(tmpIncome);       
             }  
         } 
@@ -880,9 +947,8 @@ public class DatabaseManager {
     
     public ArrayList<Income> getIncomeByIncomeID(int _incomeID)
     {
-        ResultSet rs = null;
-        
-        ArrayList incomeArray = new ArrayList<Income>();
+        ResultSet rs            = null;
+        ArrayList incomeArray   = new ArrayList<Income>();
         
         try
         {
@@ -910,20 +976,7 @@ public class DatabaseManager {
                 tmpIncome.setTimestamp(rs.getDate("timestamp"));
                 tmpIncome.setPersonID(rs.getInt("personID"));
                 tmpIncome.setIncomeID(rs.getInt("incomeID"));
-                
-                //first map period from database to an Object and then map this Object to an joda Period instance
-                o = rs.getObject("period");
-                
-                try
-                { 
-                    Period period = (Period) o; 
-                    tmpIncome.setPeriod(period);
-                }
-                
-                catch(Exception e)
-                {
-                    System.out.println("Casting Object to Period failed");
-                }
+                tmpIncome.setPeriod(this.getPeriodByID(rs.getInt("period_id"))); 
        
                 incomeArray.add(tmpIncome);       
             }  
@@ -946,20 +999,16 @@ public class DatabaseManager {
         try
         {
             PreparedStatement st = connection.prepareStatement("INSERT INTO income(name,"
-                    + " amount, timestamp, period, start, ende, \"personID\", \"incomeID\")"
+                    + " amount, timestamp, period_id, start, ende, \"personID\", \"incomeID\")"
                     + " VALUES(?, ?, ?, ?, ?, ?, ?, ?)");
             
             st.setString(1, _income.getName());
             st.setFloat(2, _income.getAmount());
             st.setDate(3, _income.getTimestamp());
-            
-            //Object o = (String) _income.getPeriod();
-            //st.setObject(4, o, ); 
-            
+            st.setInt(4, this.getPeriodID(_income.getPeriod()));
             st.setDate(5, _income.getStart());
             st.setDate(6, _income.getEnd());
             st.setInt(7, _income.getPersonID());
-            //st.setInt(8, _income.getIncomeID());
             
             //if there isnt set any subincome, set the incomeID null, because if it isnt set it will be 0 and 0 != null
             if (_income.getIncomeID() == 0)     st.setNull(8, Types.BIGINT);  //java sql types, because you have to specify the sql type if you want to set the column null
@@ -1015,7 +1064,7 @@ public class DatabaseManager {
             st.setString(1, _income.getName());
             st.setFloat(2, _income.getAmount());
             st.setDate(3, _income.getTimestamp());
-            st.setObject(4, _income.getPeriod());
+            st.setString(4, _income.getPeriod().name());
             st.setDate(5, _income.getStart());
             st.setDate(6, _income.getEnd());
             st.setInt(7, _income.getPersonID());
