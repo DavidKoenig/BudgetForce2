@@ -3,6 +3,7 @@
  * and open the template in the editor.
  */
 package budgetforce.model;
+import java.sql.Timestamp;
 import java.sql.Date;
 
 import org.joda.time.Period;  //for mapping to postgresql period format 
@@ -62,32 +63,32 @@ public class Income {
     }
 
     @XmlElement(name="start")
-    public Date getStart() {
+    public Timestamp getStart() {
         return m_Start;
     }
 
     @XmlElement(name="start")
-    public void setStart(Date _Start) {
+    public void setStart(Timestamp _Start) {
         this.m_Start = _Start;
     }
 
     @XmlElement(name="end")
-    public Date getEnd() {
+    public Timestamp getEnd() {
         return m_End;
     }
 
     @XmlElement(name="end")
-    public void setEnd(Date _End) {
+    public void setEnd(Timestamp _End) {
         this.m_End = _End;
     }
 
     @XmlElement(name="timestamp")
-    public Date getTimestamp() {
+    public Timestamp getTimestamp() {
         return m_Timestamp;
     }
 
     @XmlElement(name="timestamp")
-    public void setTimestamp(Date _Timestamp) {
+    public void setTimestamp(Timestamp _Timestamp) {
         this.m_Timestamp = _Timestamp;
     }
 
@@ -114,13 +115,13 @@ public class Income {
     //---------------------------------------------------
     // Private variables
     //--------------------------------------------------- 
-    private int         m_Id;
-    private String      m_Name;
-    private float       m_Amount;
-    private Period      m_Period;
-    private Date        m_Start;
-    private Date        m_End;
-    private Date        m_Timestamp;
-    private int         m_PersonID;
-    private int         m_IncomeID;
+    private int             m_Id;
+    private String          m_Name;
+    private float           m_Amount;
+    private Period          m_Period;
+    private Timestamp       m_Start;
+    private Timestamp       m_End;
+    private Timestamp       m_Timestamp;
+    private int             m_PersonID;
+    private int             m_IncomeID;
 }

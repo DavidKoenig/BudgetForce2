@@ -4,6 +4,8 @@
  */
 
 package budgetforce.model;
+
+import java.sql.Timestamp;
 import java.sql.Date;
 
 /**
@@ -39,27 +41,27 @@ public class Outgoing {
         this.m_Period = _Period;
     }
 
-    public Date getStart() {
+    public Timestamp getStart() {
         return m_Start;
     }
 
-    public void setStart(Date _Start) {
+    public void setStart(Timestamp _Start) {
         this.m_Start = _Start;
     }
 
-    public Date getEnd() {
+    public Timestamp getEnd() {
         return m_End;
     }
 
-    public void setEnd(Date _End) {
+    public void setEnd(Timestamp _End) {
         this.m_End = _End;
     }
 
-    public Date getTimeStamp() {
+    public Timestamp getTimeStamp() {
         return m_TimeStamp;
     }
 
-    public void setTimeStamp(Date _TimeStamp) {
+    public void setTimeStamp(Timestamp _TimeStamp) {
         this.m_TimeStamp = _TimeStamp;
     }
 
@@ -82,12 +84,12 @@ public class Outgoing {
     //---------------------------------------------------
     // Private variables
     //---------------------------------------------------
-    private int     m_Id;
-    private float   m_Amount;
-    private String  m_Period;
-    private Date    m_Start;
-    private Date    m_End;
-    private Date    m_TimeStamp;
-    private int     m_BudgetId;
-    private int     m_CategoryId;
+    private int             m_Id;
+    private float           m_Amount;
+    private String          m_Period;
+    private Timestamp       m_Start;
+    private Timestamp       m_End;
+    private Timestamp       m_TimeStamp;
+    private int             m_BudgetId;
+    private int             m_CategoryId;
 }
