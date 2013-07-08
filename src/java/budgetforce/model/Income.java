@@ -4,7 +4,6 @@
  */
 package budgetforce.model;
 import java.sql.Timestamp;
-import java.sql.Date;
 
 import org.joda.time.Period;  //for mapping to postgresql period format 
 
