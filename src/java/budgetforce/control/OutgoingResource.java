@@ -13,10 +13,14 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.POST;
 import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response;
 
 /**
  * REST Web Service
@@ -38,13 +42,13 @@ public class OutgoingResource {
         return DatabaseManager.getDatabaseManager().getOutgoingByID(_Id);      
     }
     
-    @GET
+    /*@GET
     @Path("/person/{id}")
     @Produces("application/json")
     public ArrayList<Outgoing> getOutgoingByPersonId(@PathParam("id") Integer _Id)
     {
         return DatabaseManager.getDatabaseManager().getOutgoingByPersonId(_Id);
-    }
+    }*/
     
     @GET
     @Path("/category/{id}")
@@ -54,12 +58,50 @@ public class OutgoingResource {
         return DatabaseManager.getDatabaseManager().getOutgoingByCategoryID(_Id);
     }
     
-    @GET
+   /* @GET
     @Path("/tax/{id}")
     @Produces("application/json")
     public ArrayList<Outgoing> getOutgoingByTaxId(@PathParam("id") Integer _Id)
     {
         return DatabaseManager.getDatabaseManager().getOutgoing
+    }*/
+    
+    // posting a new entry
+    @POST
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Response postOutgoing(Outgoing _Outgoing)
+    {
+        int id = DatabaseManager.getDatabaseManager().insertOutgoing(_Outgoing);
+        
+        _Outgoing.setId(id);
+        
+        return Response.status(201).entity(_Outgoing).build();
+    }
+    
+    // put for updating an entry
+    @PUT
+    @Path("{id}")
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Response putOutgoing(@PathParam("id") Integer _Id, Outgoing _Outgoing)
+    {
+        _Outgoing.setId(_Id);
+        
+        DatabaseManager.getDatabaseManager().updateOutgoing(_Outgoing);
+        
+        return Response.status(201).entity(_Outgoing).build();
+    }
+    
+    @DELETE
+    @Path("{id}")
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Response deleteOutgoing(@PathParam("id") Integer _Id)
+    {
+        boolean succesful = DatabaseManager.getDatabaseManager().deleteOutgoing(_Id);
+        
+        return Response.status(201).entity(succesful).build();
     }
     
 }
