@@ -1465,13 +1465,13 @@ public class DatabaseManager {
                     + " period_id, start, ende, timestamp, \"budgetID\", \"categoryID\") "
                     + " VALUES(?, ?, ?, ?, ?, ?)");
            
-            st.setFloat(1, _outgoing.getAmount());
-            st.setInt(2, _outgoing.getPeriodId());
-            st.setDate(3, new java.sql.Date(_outgoing.getStart().getTime()));
-            st.setDate(4, new java.sql.Date(_outgoing.getEnd().getTime()));
-            st.setDate(5, new java.sql.Date(_outgoing.getTimeStamp().getTime()));
-            st.setInt(6, _outgoing.getBudgetId());
-            st.setInt(7, _outgoing.getCategoryId());
+            st.setFloat (1, _outgoing.getAmount());
+            st.setInt   (2, _outgoing.getPeriodId());
+            st.setDate  (3, new java.sql.Date(_outgoing.getStart().getTime()));
+            st.setDate  (4, new java.sql.Date(_outgoing.getEnd().getTime()));
+            st.setDate  (5, new java.sql.Date(_outgoing.getTimeStamp().getTime()));
+            st.setInt   (6, _outgoing.getBudgetId());
+            st.setInt   (7, _outgoing.getCategoryId());
            
             st.executeUpdate();
         }
