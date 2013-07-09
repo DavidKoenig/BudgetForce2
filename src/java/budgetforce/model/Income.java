@@ -115,7 +115,7 @@ public class Income {
     private int             m_Id;
     private String          m_Name;
     private float           m_Amount;
-    private Period          m_Period;
+    private EPeriod          m_Period;
     private Timestamp       m_Start;
     private Timestamp       m_End;
     private Timestamp       m_Timestamp;

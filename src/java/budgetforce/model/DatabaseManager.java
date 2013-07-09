@@ -3,17 +3,12 @@ package budgetforce.model;
 
 // <editor-fold defaultstate="collapsed" desc="imports">
 
-import org.joda.time.Period;
-import org.joda.time.format.PeriodFormatter;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.sql.PreparedStatement;
 import java.sql.Types;  //for setting some columns null, if its necessary
-import java.sql.Timestamp;
-import javassist.bytecode.analysis.Type;
 // </editor-fold>
 
 /**
@@ -1004,10 +999,10 @@ public class DatabaseManager {
             
             st.setString(1, _income.getName());
             st.setFloat(2, _income.getAmount());
-            st.setDate(3, _income.getTimestamp());
+            st.setTimestamp(3, _income.getTimestamp());
             st.setInt(4, this.getPeriodID(_income.getPeriod()));
-            st.setDate(5, _income.getStart());
-            st.setDate(6, _income.getEnd());
+            st.setTimestamp(5, _income.getStart());
+            st.setTimestamp(6, _income.getEnd());
             st.setInt(7, _income.getPersonID());
             
             //if there isnt set any subincome, set the incomeID null, because if it isnt set it will be 0 and 0 != null
@@ -1058,13 +1053,13 @@ public class DatabaseManager {
         try
         {
             PreparedStatement st = connection.prepareStatement("UPDATE income"
-                    + " SET name = ?, amount = ?, timestamp = ?, period = ?, start = ?,"
+                    + " SET name = ?, amount = ?, timestamp = ?, period_id = ?, start = ?,"
                     + " ende = ?, \"personID\" = ?, \"incomeID\" = ?  WHERE id = ?");
            
             st.setString(1, _income.getName());
             st.setFloat(2, _income.getAmount());
             st.setTimestamp(3, _income.getTimestamp());
-            st.setObject(4, _income.getPeriod());
+            st.setInt(4, this.getPeriodID(_income.getPeriod()));
             st.setTimestamp(5, _income.getStart());
             st.setTimestamp(6, _income.getEnd());
             st.setInt(7, _income.getPersonID());
