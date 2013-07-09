@@ -20,7 +20,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response;
 
 /**
  * REST Web Service
@@ -66,6 +65,14 @@ public class OutgoingResource {
         return DatabaseManager.getDatabaseManager().getOutgoing
     }*/
     
+    @GET
+    @Path("/budget/{id}")
+    @Produces("application/json")
+    public ArrayList<Outgoing> getOutgoingByBudgetId(@PathParam("id") Integer _Id)
+    {
+        return DatabaseManager.getDatabaseManager().getOutgoingByBudgetID(_Id);
+    }
+    
     // posting a new entry
     @POST
     @Consumes("application/json")
@@ -99,9 +106,9 @@ public class OutgoingResource {
     @Produces("application/json")
     public Response deleteOutgoing(@PathParam("id") Integer _Id)
     {
-        boolean succesful = DatabaseManager.getDatabaseManager().deleteOutgoing(_Id);
+        boolean successful = DatabaseManager.getDatabaseManager().deleteOutgoing(_Id);
         
-        return Response.status(201).entity(succesful).build();
+        return Response.status(201).entity(successful).build();
     }
     
 }

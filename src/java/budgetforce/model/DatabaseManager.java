@@ -1409,7 +1409,7 @@ public class DatabaseManager {
         
         try
         {
-            PreparedStatement st = connection.prepareStatement("SELECT * FROM outgoing WHERE id = ?");
+            PreparedStatement st = connection.prepareStatement("SELECT * FROM outgoing WHERE \"budgetID\" = ?");
             
             st.setInt(1, _budgetID);
             rs = st.executeQuery();
@@ -1457,7 +1457,7 @@ public class DatabaseManager {
         
         try
         {
-            PreparedStatement st = connection.prepareStatement("SELECT * FROM outgoing WHERE id = ?");
+            PreparedStatement st = connection.prepareStatement("SELECT * FROM outgoing WHERE \"categoryID\" = ?");
             
             st.setInt(1, _categoryID);
             rs = st.executeQuery();
