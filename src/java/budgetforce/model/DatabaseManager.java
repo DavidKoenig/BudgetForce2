@@ -1504,7 +1504,7 @@ public class DatabaseManager {
         {
             PreparedStatement st = connection.prepareStatement("INSERT INTO outgoing(amount,"
                     + " period_id, start, ende, timestamp, \"budgetID\", \"categoryID\") "
-                    + " VALUES(?, ?, ?, ?, ?, ?)");
+                    + " VALUES(?, ?, ?, ?, ?, ?, ?)");
            
             st.setFloat(1, _outgoing.getAmount());
             st.setInt(2, this.getPeriodID(_outgoing.getPeriod()));
