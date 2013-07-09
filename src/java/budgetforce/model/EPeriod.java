@@ -14,5 +14,19 @@ public enum EPeriod {
     DAY,
     MONTH,
     QUARTER,
-    YEAR
+    YEAR;
+    //UNKNOWN;
+    
+    /*
+    public static EPeriod fromString(String value) {
+        for (EPeriod period : values()) {
+            if (period.name().equalsIgnoreCase(value)) {
+                return period;
+            }
+        }
+
+        return UNKNOWN;
+    }
+    * */
+    
 }

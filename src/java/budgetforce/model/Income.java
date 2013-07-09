@@ -5,8 +5,6 @@
 package budgetforce.model;
 import java.sql.Timestamp;
 
-import org.joda.time.Period;  //for mapping to postgresql period format 
-
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -52,13 +50,13 @@ public class Income {
     }
 
     @XmlElement(name="period")
-    public Period getPeriod() {
+    public EPeriod getPeriod() {
         return m_Period;
     }
-
+    
     @XmlElement(name="period")
-    public void setPeriod(Period _Period) {
-        this.m_Period = _Period;
+    public void setPeriod(EPeriod _Period) {
+        this.m_Period = _Period;  
     }
 
     @XmlElement(name="start")
@@ -117,7 +115,7 @@ public class Income {
     private int             m_Id;
     private String          m_Name;
     private float           m_Amount;
-    private Period          m_Period;
+    private EPeriod          m_Period;
     private Timestamp       m_Start;
     private Timestamp       m_End;
     private Timestamp       m_Timestamp;
