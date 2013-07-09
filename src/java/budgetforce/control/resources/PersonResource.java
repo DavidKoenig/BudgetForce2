@@ -1,5 +1,5 @@
 
-package budgetforce.control;
+package budgetforce.control.resources;
 
 // <editor-fold defaultstate="collapsed" desc="imports">
 import budgetforce.model.Person;
@@ -64,9 +64,9 @@ public class PersonResource {
     public Response putPerson(@PathParam("id") Integer _Id, Person _Person) 
     {
         _Person.setId(_Id);
-        DatabaseManager.getDatabaseManager().updatePerson(_Person);
+        boolean successful = DatabaseManager.getDatabaseManager().updatePerson(_Person);
         
-        return Response.status(201).entity(_Person).build();
+        return Response.status(201).entity(successful).build();
     }
     
     @DELETE
