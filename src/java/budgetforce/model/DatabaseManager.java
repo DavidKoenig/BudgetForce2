@@ -202,7 +202,6 @@ public class DatabaseManager {
     public Address getAddressByID(int _id)
     {  
         ResultSet rs = null;
-        
         Address address = new Address();
         
         try
@@ -293,21 +292,20 @@ public class DatabaseManager {
                 address.setAddressAddition(rs.getString("addressAddition"));
                 
                 String type = rs.getString("type");
-                type.toUpperCase();
                 
-                if(type.equals(address.getType().ADDITIONAL))
+                if(type.equals(Address.EAddressType.ADDITIONAL.name()))
                 {
                     address.setType(Address.EAddressType.ADDITIONAL);
                 }
-                else if(type.equals(address.getType().BILLING))
+                else if(type.equals(Address.EAddressType.BILLING.name()))
                 {
                     address.setType(Address.EAddressType.BILLING);
                 }
-                else if(type.equals(address.getType().COMPANY))
+                else if(type.equals(Address.EAddressType.COMPANY.name()))
                 {
                     address.setType(Address.EAddressType.COMPANY);
                 }
-                else if(type.equals(address.getType().PRIVATE))
+                else if(type.equals(Address.EAddressType.PRIVATE.name()))
                 {
                     address.setType(Address.EAddressType.PRIVATE);
                 }
@@ -335,14 +333,14 @@ public class DatabaseManager {
         {
             PreparedStatement st = connection.prepareStatement("INSERT INTO address(\"streetNmbr\","
                     + " city, zipcode, country, type, \"personID\", \"addressAddition\")"
-                    + " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                    + " VALUES(?, ?, ?, ?, ?, ?, ?)");
             st.setString(1, _address.getStreetNmbr());
             st.setString(2, _address.getCity());
             st.setString(3, _address.getZipCode());
             st.setString(4, _address.getCountry());
-            st.setString(8, _address.getType().toString().toLowerCase()); 
-            st.setInt(9, _address.getPersondId());
-            st.setString(10, _address.getAddressAddition());
+            st.setString(5, _address.getType().name()); 
+            st.setInt(6, _address.getPersondId());
+            st.setString(7, _address.getAddressAddition());
             
             st.executeUpdate();
         }
@@ -389,17 +387,17 @@ public class DatabaseManager {
         {
             PreparedStatement st = connection.prepareStatement("UPDATE address SET"
                     + " \"streetNmbr\" = ?, city = ?, zipcode = ?, country = ?,"
-                    + " type = ?, \"personID\" = ?, \"addressAddition\" = ?)"
+                    + " type = ?, \"personID\" = ?, \"addressAddition\" = ?"
                     + " WHERE id = ? ");
             
             st.setString(1, _address.getStreetNmbr());
             st.setString(2, _address.getCity());
             st.setString(3, _address.getZipCode());
             st.setString(4, _address.getCountry());
-            st.setString(8, _address.getType().toString().toLowerCase()); 
-            st.setInt(9, _address.getPersondId());
-            st.setString(10, _address.getAddressAddition());
-            st.setInt(11, _address.getId());
+            st.setString(5, _address.getType().name()); 
+            st.setInt(6, _address.getPersondId());
+            st.setString(7, _address.getAddressAddition());
+            st.setInt(8, _address.getId());
             
             st.executeUpdate();
         }
@@ -414,13 +412,13 @@ public class DatabaseManager {
     }
     
     
-    public boolean deleteAddress(Address _address)
+    public boolean deleteAddress(int _Id)
     {
         try
         {
             PreparedStatement st = connection.prepareStatement("DELETE FROM address WHERE id = ?");
             
-            st.setInt(1, _address.getId());
+            st.setInt(1, _Id);
             st.executeUpdate();
         }
         
@@ -742,8 +740,8 @@ public class DatabaseManager {
         try {
             while(rs.next())
             {  
-                category.setM_Id(rs.getInt("id"));
-                category.setM_Name(rs.getString("name"));
+                category.setId(rs.getInt("id"));
+                category.setName(rs.getString("name"));
             }
         } 
         
@@ -766,7 +764,7 @@ public class DatabaseManager {
             PreparedStatement st = connection.prepareStatement("INSERT INTO category(name)"
                     + " VALUES(?)");
             
-            st.setString(1, _category.getM_Name());
+            st.setString(1, _category.getName());
             
             st.executeUpdate();
         }
@@ -812,11 +810,11 @@ public class DatabaseManager {
     {  
         try
         {
-            PreparedStatement st = connection.prepareStatement("UPDATE budget SET"
+            PreparedStatement st = connection.prepareStatement("UPDATE category SET"
                     + " name = ? WHERE id = ?");
             
-            st.setString(1, _category.getM_Name());
-            st.setInt(2, _category.getM_Id());
+            st.setString(1, _category.getName());
+            st.setInt(2, _category.getId());
             
             st.executeUpdate();
         }

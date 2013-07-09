@@ -2,7 +2,7 @@
 package budgetforce.control;
 
 // <editor-fold defaultstate="collapsed" desc="imports">
-import budgetforce.model.Person;
+import budgetforce.model.Address;
 import budgetforce.model.DatabaseManager;
 
 import javax.ws.rs.core.Response;
@@ -17,6 +17,8 @@ import javax.ws.rs.DELETE;
 
 import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
+
+import java.util.ArrayList;
 // </editor-fold>
 
 /**
@@ -24,36 +26,40 @@ import javax.ws.rs.Consumes;
  *
  * @author David König
  */
-@Path("/person")
-public class PersonResource {
+@Path("/address")
+public class AddressResource {
 
-    public PersonResource() 
+    public AddressResource() 
     {
     }
 
     @GET
     @Path("{id}")
     @Produces("application/json")
-    public Person getPersonById(@PathParam("id") Integer _Id) 
+    public Address getAddressById(@PathParam("id") Integer _Id) 
     {
-        Person person = new Person();
-        
-        person = DatabaseManager.getDatabaseManager().getPersonByID(_Id);
-    
-        return person;
+        return DatabaseManager.getDatabaseManager().getAddressByID(_Id);
     }
 
+    @GET
+    @Path("/person/{id}")
+    @Produces("application/json")
+    public ArrayList<Address> getAddressByPersonId(@PathParam("id") Integer _Id) 
+    {
+        return DatabaseManager.getDatabaseManager().getAddressByPersonID(_Id);
+    }
+    
     //post for creating a new entry
     @POST
     @Consumes("application/json")
     @Produces("application/json")
-    public Response postPerson(Person _Person) 
+    public Response postAddress(Address _Address) 
     {     
-        int id = DatabaseManager.getDatabaseManager().insertPerson(_Person);
+        int id = DatabaseManager.getDatabaseManager().insertAddress(_Address);
         
-        _Person.setId(id);
+        _Address.setId(id);
         
-        return Response.status(201).entity(_Person).build();
+        return Response.status(201).entity(_Address).build();
     }
     
     //put for updating an entry
@@ -61,10 +67,10 @@ public class PersonResource {
     @Path("{id}")
     @Consumes("application/json")
     @Produces("application/json")
-    public Response putPerson(@PathParam("id") Integer _Id, Person _Person) 
+    public Response putAddress(@PathParam("id") Integer _Id, Address _Address) 
     {
-        _Person.setId(_Id);
-        boolean successful = DatabaseManager.getDatabaseManager().updatePerson(_Person);
+        _Address.setId(_Id);
+        boolean successful = DatabaseManager.getDatabaseManager().updateAddress(_Address);
         
         return Response.status(201).entity(successful).build();
     }
@@ -73,9 +79,9 @@ public class PersonResource {
     @Path("{id}")
     @Consumes("application/json")
     @Produces("application/json")
-    public Response deletePerson(@PathParam("id") Integer _Id) 
+    public Response deleteAddress(@PathParam("id") Integer _Id) 
     {
-        boolean successful = DatabaseManager.getDatabaseManager().deletePerson(_Id);
+        boolean successful = DatabaseManager.getDatabaseManager().deleteAddress(_Id);
         
         return Response.status(201).entity(successful).build();
     }
