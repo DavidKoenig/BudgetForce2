@@ -457,6 +457,7 @@ public class DatabaseManager {
             while(rs.next())
             {  
                 budget.setBudgetId(rs.getInt("id"));
+                budget.setAmount(rs.getFloat("amount"));
                 budget.setCurrency(rs.getString("currency"));
                 budget.setName(rs.getString("name"));
                 budget.setPersonId(rs.getInt("personID"));
@@ -482,7 +483,7 @@ public class DatabaseManager {
         
         try
         {
-            PreparedStatement st = connection.prepareStatement("SELECT * FROM budget WHERE \"personID = ?");
+            PreparedStatement st = connection.prepareStatement("SELECT * FROM budget WHERE \"personID\" = ?");
             
             st.setInt(1, _personID);
             rs = st.executeQuery();
@@ -500,6 +501,7 @@ public class DatabaseManager {
                 Budget budget = new Budget();
                 
                 budget.setBudgetId(rs.getInt("id"));
+                budget.setAmount(rs.getFloat("amount"));
                 budget.setCurrency(rs.getString("currency"));
                 budget.setName(rs.getString("name"));
                 budget.setPersonId(rs.getInt("personID"));
@@ -546,6 +548,7 @@ public class DatabaseManager {
                 Budget budget = new Budget();
                 
                 budget.setBudgetId(rs.getInt("id"));
+                budget.setAmount(rs.getFloat("amount"));
                 budget.setCurrency(rs.getString("currency"));
                 budget.setName(rs.getString("name"));
                 budget.setPersonId(rs.getInt("personID"));
@@ -592,6 +595,7 @@ public class DatabaseManager {
                 Budget budget = new Budget();
                 
                 budget.setBudgetId(rs.getInt("id"));
+                budget.setAmount(rs.getFloat("amount"));
                 budget.setCurrency(rs.getString("currency"));
                 budget.setName(rs.getString("name"));
                 budget.setPersonId(rs.getInt("personID"));
@@ -619,15 +623,22 @@ public class DatabaseManager {
         
         try
         {
-            PreparedStatement st = connection.prepareStatement("INSERT INTO budget(name,"
-                    + " currency, \"personID\", \"projectID\", \"budgetID\")"
-                    + " VALUES(?, ?, ?, ?, ?)");
+            PreparedStatement st = connection.prepareStatement("INSERT INTO budget (name,"
+                    + " currency, amount, \"personID\", \"projectID\", \"budgetID\")"
+                    + " VALUES(?, ?, ?, ?, ?, ?)");
             
             st.setString(1, _budget.getName());
             st.setString(2, _budget.getCurrency());
-            st.setInt(3, _budget.getPersonId());
-            st.setInt(4, _budget.getProjectId());
-            st.setInt(5, _budget.getBudgetId());
+            st.setFloat(3, _budget.getAmount());
+            
+            if (_budget.getPersonId()== 0)      st.setNull(4, Types.BIGINT);  //java sql types, because you have to specify the sql type if you want to set the column null
+            else                                st.setInt(4, _budget.getPersonId());
+            
+            if (_budget.getProjectId() == 0)    st.setNull(5, Types.BIGINT);  //java sql types, because you have to specify the sql type if you want to set the column null
+            else                                st.setInt(5, _budget.getProjectId());
+           
+            if (_budget.getBudgetId()== 0)      st.setNull(6, Types.BIGINT);  //java sql types, because you have to specify the sql type if you want to set the column null
+            else                                st.setInt(6, _budget.getBudgetId());
             
             st.executeUpdate();
         }
@@ -674,15 +685,23 @@ public class DatabaseManager {
         {
             PreparedStatement st = connection.prepareStatement("UPDATE budget SET"
                     + " name = ?, currency = ?, \"personID\" = ?, \"projectID\" = ?,"
-                    + " \"budgetID\" = ? "
+                    + " \"budgetID\" = ?, amount = ? "
                     + " WHERE id = ?");
             
             st.setString(1, _budget.getName());
             st.setString(2, _budget.getCurrency());
-            st.setInt(3, _budget.getPersonId());
-            st.setInt(4, _budget.getProjectId());
-            st.setInt(5, _budget.getBudgetId());
-            st.setInt(6, _budget.getId());
+
+            if (_budget.getPersonId()== 0)      st.setNull(3, Types.BIGINT);  //java sql types, because you have to specify the sql type if you want to set the column null
+            else                                st.setInt(3, _budget.getPersonId());
+            
+            if (_budget.getProjectId() == 0)    st.setNull(4, Types.BIGINT);  //java sql types, because you have to specify the sql type if you want to set the column null
+            else                                st.setInt(4, _budget.getProjectId());
+           
+            if (_budget.getBudgetId()== 0)      st.setNull(5, Types.BIGINT);  //java sql types, because you have to specify the sql type if you want to set the column null
+            else                                st.setInt(5, _budget.getBudgetId());
+           
+            st.setFloat (6, _budget.getAmount());
+            st.setInt   (7, _budget.getId());
             
             st.executeUpdate();
         }
@@ -1407,7 +1426,7 @@ public class DatabaseManager {
         
         try
         {
-            PreparedStatement st = connection.prepareStatement("SELECT * FROM outgoing WHERE id = ?");
+            PreparedStatement st = connection.prepareStatement("SELECT * FROM outgoing WHERE \"budgetID\" = ?");
             
             st.setInt(1, _budgetID);
             rs = st.executeQuery();
@@ -1455,7 +1474,7 @@ public class DatabaseManager {
         
         try
         {
-            PreparedStatement st = connection.prepareStatement("SELECT * FROM outgoing WHERE id = ?");
+            PreparedStatement st = connection.prepareStatement("SELECT * FROM outgoing WHERE \"categoryID\" = ?");
             
             st.setInt(1, _categoryID);
             rs = st.executeQuery();
