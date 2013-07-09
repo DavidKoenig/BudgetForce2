@@ -12,8 +12,8 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.sql.PreparedStatement;
 import java.sql.Types;  //for setting some columns null, if its necessary
-import org.joda.time.format.PeriodFormatterBuilder;
-
+import java.sql.Timestamp;
+import javassist.bytecode.analysis.Type;
 // </editor-fold>
 
 /**
@@ -1387,10 +1387,10 @@ public class DatabaseManager {
             {  
                 outgoing.setId(rs.getInt("id"));
                 outgoing.setAmount(rs.getFloat("amount"));
-                outgoing.setPeriod(rs.getString("period"));
-                outgoing.setStart(rs.getDate("start"));
-                outgoing.setEnd(rs.getDate("ende"));
-                outgoing.setTimeStamp(rs.getDate("timestamp"));
+                outgoing.setPeriodId(rs.getInt("period_id"));
+                outgoing.setStart(rs.getTimestamp("start"));
+                outgoing.setEnd(rs.getTimestamp("ende"));
+                outgoing.setTimeStamp(rs.getTimestamp("timestamp"));
                 outgoing.setBudgetId(rs.getInt("budgetID"));
                 outgoing.setCategoryId(rs.getInt("categoryID"));
             }
@@ -1433,10 +1433,10 @@ public class DatabaseManager {
                 
                 outgoing.setId(rs.getInt("id"));
                 outgoing.setAmount(rs.getFloat("amount"));
-                outgoing.setPeriod(rs.getString("period"));
-                outgoing.setStart(rs.getDate("start"));
-                outgoing.setEnd(rs.getDate("ende"));
-                outgoing.setTimeStamp(rs.getDate("timestamp"));
+                outgoing.setPeriodId(rs.getInt("period_id"));
+                outgoing.setStart(rs.getTimestamp("start"));
+                outgoing.setEnd(rs.getTimestamp("ende"));
+                outgoing.setTimeStamp(rs.getTimestamp("timestamp"));
                 outgoing.setBudgetId(rs.getInt("budgetID"));
                 outgoing.setCategoryId(rs.getInt("categoryID"));
                 
@@ -1481,10 +1481,10 @@ public class DatabaseManager {
                 
                 outgoing.setId(rs.getInt("id"));
                 outgoing.setAmount(rs.getFloat("amount"));
-                outgoing.setPeriod(rs.getString("period"));
-                outgoing.setStart(rs.getDate("start"));
-                outgoing.setEnd(rs.getDate("ende"));
-                outgoing.setTimeStamp(rs.getDate("timestamp"));
+                outgoing.setPeriodId(rs.getInt("period_id"));
+                outgoing.setStart(rs.getTimestamp("start"));
+                outgoing.setEnd(rs.getTimestamp("ende"));
+                outgoing.setTimeStamp(rs.getTimestamp("timestamp"));
                 outgoing.setBudgetId(rs.getInt("budgetID"));
                 outgoing.setCategoryId(rs.getInt("categoryID"));
                 
@@ -1510,14 +1510,14 @@ public class DatabaseManager {
         try
         {
             PreparedStatement st = connection.prepareStatement("INSERT INTO outgoing(amount,"
-                    + " period, start, ende, timestamp, \"budgetID\", \"categoryID\") "
+                    + " period_id, start, ende, timestamp, \"budgetID\", \"categoryID\") "
                     + " VALUES(?, ?, ?, ?, ?, ?)");
            
             st.setFloat(1, _outgoing.getAmount());
-            st.setString(2, _outgoing.getPeriod());
-            st.setDate(3, _outgoing.getStart());
-            st.setDate(4, _outgoing.getEnd());
-            st.setDate(5, _outgoing.getTimeStamp());
+            st.setInt(2, _outgoing.getPeriodId());
+            st.setDate(3, new java.sql.Date(_outgoing.getStart().getTime()));
+            st.setDate(4, new java.sql.Date(_outgoing.getEnd().getTime()));
+            st.setDate(5, new java.sql.Date(_outgoing.getTimeStamp().getTime()));
             st.setInt(6, _outgoing.getBudgetId());
             st.setInt(7, _outgoing.getCategoryId());
            
@@ -1565,14 +1565,14 @@ public class DatabaseManager {
         try
         {
             PreparedStatement st = connection.prepareStatement("UPDATE outgoing SET amount = ?, "
-                    + " period = ?, start = ?, ende = ?, timestamp = ?, \"budgetID\" = ?,"
+                    + " period_id = ?, start = ?, ende = ?, timestamp = ?, \"budgetID\" = ?,"
                     + " \"categoryID\" = ? WHERE id = ?");
            
             st.setFloat(1, _outgoing.getAmount());
-            st.setString(2, _outgoing.getPeriod());
-            st.setDate(3, _outgoing.getStart());
-            st.setDate(4, _outgoing.getEnd());
-            st.setDate(5, _outgoing.getTimeStamp());
+            st.setInt(2, _outgoing.getPeriodId());
+            st.setTimestamp(3, new java.sql.Timestamp(_outgoing.getStart().getTime()));
+            st.setTimestamp(4, new java.sql.Timestamp(_outgoing.getEnd().getTime()));
+            st.setTimestamp(5, new java.sql.Timestamp(_outgoing.getTimeStamp().getTime()));
             st.setInt(6, _outgoing.getBudgetId());
             st.setInt(7, _outgoing.getCategoryId());
             st.setInt(8, _outgoing.getId());
