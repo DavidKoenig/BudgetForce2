@@ -882,9 +882,9 @@ public class DatabaseManager {
                 income.setId(rs.getInt("id"));
                 income.setName(rs.getString("name"));
                 income.setAmount(rs.getFloat("amount"));
-                income.setStart(rs.getDate("start"));
-                income.setEnd(rs.getDate("ende"));
-                income.setTimestamp(rs.getDate("timestamp"));
+                income.setStart(rs.getTimestamp("start"));
+                income.setEnd(rs.getTimestamp("ende"));
+                income.setTimestamp(rs.getTimestamp("timestamp"));
                 income.setPersonID(rs.getInt("personID"));
                 income.setIncomeID(rs.getInt("incomeID"));
                 income.setPeriod(this.getPeriodByID(rs.getInt("period_id"))); 
@@ -925,9 +925,9 @@ public class DatabaseManager {
                 tmpIncome.setId(rs.getInt("id"));
                 tmpIncome.setName(rs.getString("name"));
                 tmpIncome.setAmount(rs.getFloat("amount"));   
-                tmpIncome.setStart(rs.getDate("start"));
-                tmpIncome.setEnd(rs.getDate("ende"));
-                tmpIncome.setTimestamp(rs.getDate("timestamp"));
+                tmpIncome.setStart(rs.getTimestamp("start"));
+                tmpIncome.setEnd(rs.getTimestamp("ende"));
+                tmpIncome.setTimestamp(rs.getTimestamp("timestamp"));
                 tmpIncome.setPersonID(rs.getInt("personID"));
                 tmpIncome.setIncomeID(rs.getInt("incomeID"));
                 tmpIncome.setPeriod(this.getPeriodByID(rs.getInt("period_id"))); 
@@ -971,9 +971,9 @@ public class DatabaseManager {
                 tmpIncome.setId(rs.getInt("id"));
                 tmpIncome.setName(rs.getString("name"));
                 tmpIncome.setAmount(rs.getFloat("amount"));
-                tmpIncome.setStart(rs.getDate("start"));
-                tmpIncome.setEnd(rs.getDate("ende"));
-                tmpIncome.setTimestamp(rs.getDate("timestamp"));
+                tmpIncome.setStart(rs.getTimestamp("start"));
+                tmpIncome.setEnd(rs.getTimestamp("ende"));
+                tmpIncome.setTimestamp(rs.getTimestamp("timestamp"));
                 tmpIncome.setPersonID(rs.getInt("personID"));
                 tmpIncome.setIncomeID(rs.getInt("incomeID"));
                 tmpIncome.setPeriod(this.getPeriodByID(rs.getInt("period_id"))); 
@@ -1063,10 +1063,10 @@ public class DatabaseManager {
            
             st.setString(1, _income.getName());
             st.setFloat(2, _income.getAmount());
-            st.setDate(3, _income.getTimestamp());
-            st.setString(4, _income.getPeriod().name());
-            st.setDate(5, _income.getStart());
-            st.setDate(6, _income.getEnd());
+            st.setTimestamp(3, _income.getTimestamp());
+            st.setObject(4, _income.getPeriod());
+            st.setTimestamp(5, _income.getStart());
+            st.setTimestamp(6, _income.getEnd());
             st.setInt(7, _income.getPersonID());
             st.setInt(8, _income.getIncomeID());
             st.setInt(9, _income.getId());
