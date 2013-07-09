@@ -1151,7 +1151,7 @@ public class DatabaseManager {
         return login;
     }
     
-    
+            
     public Login getLoginByPersonID(int _personID)
     { 
         Login login = new Login();
