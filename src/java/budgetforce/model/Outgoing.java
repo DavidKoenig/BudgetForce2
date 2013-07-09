@@ -6,7 +6,6 @@
 package budgetforce.model;
 
 import java.sql.Timestamp;
-import java.util.Date;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -43,32 +42,32 @@ public class Outgoing {
     }
 
     @XmlElement(name="start")
-    public Date getStart() {
+    public Timestamp getStart() {
         return m_Start;
     }
 
     @XmlElement(name="start")
-    public void setStart(Date _Start) {
+    public void setStart(Timestamp _Start) {
         this.m_Start = _Start;
     }
 
     @XmlElement(name="end")
-    public Date getEnd() {
+    public Timestamp getEnd() {
         return m_End;
     }
 
     @XmlElement(name="end")
-    public void setEnd(Date _End) {
+    public void setEnd(Timestamp _End) {
         this.m_End = _End;
     }
 
     @XmlElement(name="timestamp")
-    public Date getTimeStamp() {
+    public Timestamp getTimeStamp() {
         return m_TimeStamp;
     }
 
     @XmlElement(name="timestamp")
-    public void setTimeStamp(Date _TimeStamp) {
+    public void setTimeStamp(Timestamp _TimeStamp) {
         this.m_TimeStamp = _TimeStamp;
     }
 
@@ -92,14 +91,14 @@ public class Outgoing {
         this.m_CategoryId = _CategoryId;
     }
     
-    @XmlElement(name="periodid")
-    public int getPeriodId() {
-        return this.m_PeriodId;
+    @XmlElement(name="period")
+    public EPeriod getPeriod() {
+        return this.m_Period;
     }
     
-    @XmlElement(name="periodid")
-    public void setPeriodId(int _PeriodId) {
-        this.m_PeriodId = _PeriodId;
+    @XmlElement(name="period")
+    public void setPeriod(EPeriod _Period) {
+        this.m_Period = _Period;
     }
    
     //---------------------------------------------------
@@ -107,10 +106,10 @@ public class Outgoing {
     //---------------------------------------------------
     private int             m_Id;
     private float           m_Amount;
-    private Date            m_Start;
-    private Date            m_End;
-    private Date            m_TimeStamp;
+    private Timestamp       m_Start;
+    private Timestamp       m_End;
+    private Timestamp       m_TimeStamp;
     private int             m_BudgetId;
     private int             m_CategoryId;
-    private int             m_PeriodId;
+    private EPeriod         m_Period;
 }
