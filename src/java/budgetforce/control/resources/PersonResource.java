@@ -1,8 +1,8 @@
 
-package budgetforce.control;
+package budgetforce.control.resources;
 
 // <editor-fold defaultstate="collapsed" desc="imports">
-import budgetforce.model.Category;
+import budgetforce.model.Person;
 import budgetforce.model.DatabaseManager;
 
 import javax.ws.rs.core.Response;
@@ -24,36 +24,36 @@ import javax.ws.rs.Consumes;
  *
  * @author David König
  */
-@Path("/category")
-public class CategoryResource {
+@Path("/person")
+public class PersonResource {
 
-    public CategoryResource() 
+    public PersonResource() 
     {
     }
 
     @GET
     @Path("{id}")
     @Produces("application/json")
-    public Category getCategoryById(@PathParam("id") Integer _Id) 
+    public Person getPersonById(@PathParam("id") Integer _Id) 
     {
-        Category category = new Category();
+        Person person = new Person();
         
-        category = DatabaseManager.getDatabaseManager().getCategoryByID(_Id);
+        person = DatabaseManager.getDatabaseManager().getPersonByID(_Id);
     
-        return category;
+        return person;
     }
 
     //post for creating a new entry
     @POST
     @Consumes("application/json")
     @Produces("application/json")
-    public Response postCategory(Category _Category) 
+    public Response postPerson(Person _Person) 
     {     
-        int id = DatabaseManager.getDatabaseManager().insertCategory(_Category);
+        int id = DatabaseManager.getDatabaseManager().insertPerson(_Person);
         
-        _Category.setId(id);
+        _Person.setId(id);
         
-        return Response.status(201).entity(_Category).build();
+        return Response.status(201).entity(_Person).build();
     }
     
     //put for updating an entry
@@ -61,10 +61,10 @@ public class CategoryResource {
     @Path("{id}")
     @Consumes("application/json")
     @Produces("application/json")
-    public Response putCategory(@PathParam("id") Integer _Id, Category _Category) 
+    public Response putPerson(@PathParam("id") Integer _Id, Person _Person) 
     {
-        _Category.setId(_Id);
-        boolean successful = DatabaseManager.getDatabaseManager().updateCategory(_Category);
+        _Person.setId(_Id);
+        boolean successful = DatabaseManager.getDatabaseManager().updatePerson(_Person);
         
         return Response.status(201).entity(successful).build();
     }
@@ -73,9 +73,9 @@ public class CategoryResource {
     @Path("{id}")
     @Consumes("application/json")
     @Produces("application/json")
-    public Response deleteCategory(@PathParam("id") Integer _Id) 
+    public Response deletePerson(@PathParam("id") Integer _Id) 
     {
-        boolean successful = DatabaseManager.getDatabaseManager().deleteCategory(_Id);
+        boolean successful = DatabaseManager.getDatabaseManager().deletePerson(_Id);
         
         return Response.status(201).entity(successful).build();
     }
