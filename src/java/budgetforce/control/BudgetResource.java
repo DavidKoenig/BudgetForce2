@@ -54,7 +54,7 @@ public class BudgetResource {
     // getBudgetByPersonId
     //---------------------------------------------------
     @GET
-    @Path("/Person/{id}")
+    @Path("/person/{id}")
     @Produces("application/json")
     public ArrayList<Budget> getBudgetByPersonId(@PathParam("id") Integer _Id)
     {

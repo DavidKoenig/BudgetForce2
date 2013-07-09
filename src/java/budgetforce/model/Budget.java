@@ -38,6 +38,16 @@ public class Budget {
     public void setName(String _Name) {
         this.m_Name = _Name;
     }
+    
+    @XmlElement(name="amount")
+    public float getAmount() {
+        return m_Amount;
+    }
+    
+    @XmlElement(name="amount")
+    public void setAmount(float _Amount) {
+        this.m_Amount = _Amount;
+    }
 
     @XmlElement(name="currency")
     public String getCurrency() {
@@ -84,6 +94,7 @@ public class Budget {
     //---------------------------------------------------
     private int     m_Id;
     private String  m_Name;
+    private float   m_Amount;
     private String  m_Currency;
     private int     m_PersonId;
     private int     m_ProjectId;
