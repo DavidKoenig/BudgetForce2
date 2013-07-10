@@ -1,5 +1,5 @@
 
-package budgetforce.control;
+package budgetforce.control.resources;
 
 // <editor-fold defaultstate="collapsed" desc="imports">
 import budgetforce.model.Tax;
