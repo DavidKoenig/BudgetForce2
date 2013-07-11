@@ -12,7 +12,8 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @XmlRootElement
 public class Receipt 
-{
+{  
+    
     //---------------------------------------------------
     // Get and set functions
     //-------------------------------------------------- 
@@ -65,6 +66,21 @@ public class Receipt
     public void setPersonID(int _PersonID) {
         this.m_PersonID = _PersonID;
     }
+   
+    //---------------------------------------------------
+    // class Methods
+    //---------------------------------------------------     
+    @XmlTransient
+    public static int NewReceiptID()
+    {
+        return ++s_ReceiptCount;
+    }
+    
+    @XmlTransient
+    public static void SetReceiptCount(int value)
+    {
+        s_ReceiptCount = value;
+    }
     
     //---------------------------------------------------
     // Private variables
@@ -74,4 +90,6 @@ public class Receipt
     private String  m_Filename;
     private int     m_OutgoingID;
     private int     m_PersonID;
+    
+    private static int s_ReceiptCount = 0; 
 }

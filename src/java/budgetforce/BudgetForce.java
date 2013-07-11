@@ -18,6 +18,7 @@ public class BudgetForce {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+                
         // TODO code application logic here
         //Income income = new Income();
         //DatabaseManager db = new DatabaseManager();
