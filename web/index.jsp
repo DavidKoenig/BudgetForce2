@@ -13,27 +13,27 @@
         <title>BudgetForce</title>
     </head>
     <body>
-        <a href="register.jsp">Registrieren</a>
+        
         <%
             if(session.getAttribute("loggedIn") == null)
             {%>
+                <a href="register.jsp">Registrieren</a>
                 <form method="post" action="login" name="loginForm">
                     Benutzername:<input type="text" name="username" id="username">
                     Passwort:<input type="password" name="password" id="password">
                     <input type="submit">
                 </form>
-            <%
-            }
+            <%}
             else
             {
                 SessionLogin sessionLogin = (SessionLogin)session.getAttribute("loggedIn");
                 if(sessionLogin.loggedIn)
-                {
-                %>
-                    Hallo <% session.getAttribute("username"); %>
-                <%                
-                }
-            }
-            %>
+                {%>
+                    Hallo <%= session.getAttribute("username") %><br>
+                    <form method="post" action="logout" name="logoutForm">
+                        <input type="submit" value="Logout">
+                    </form>
+                <%}
+            }%>
     </body>
 </html>
