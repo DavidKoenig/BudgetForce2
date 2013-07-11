@@ -2296,7 +2296,7 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem inserting project into database");
+            System.out.println("Problem inserting receipt into database");
         }
         
         //get ID
@@ -2376,6 +2376,40 @@ public class DatabaseManager {
  
         return true;
     }
+    
+    public int getMaxReceiptID()
+    {
+        ResultSet rs = null;
+        
+        try
+        {
+            PreparedStatement st = connection.prepareStatement("SELECT Max(ID) FROM receipt");
+     
+            rs = st.executeQuery();
+        }   
+        catch(Exception e)
+        {
+            System.out.println("Problem selecting Max Receipt.ID from Database");
+        }
+        
+        int result = -1;
+        
+        try 
+        {
+            while(rs.next())
+            {  
+                result = rs.getInt(1);
+            }
+            rs.close();
+        } 
+        catch(Exception e)
+        {
+            System.out.println("Problem mapping selected value");
+        }
+
+        return result;
+    }
+    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="systemNotifcation">

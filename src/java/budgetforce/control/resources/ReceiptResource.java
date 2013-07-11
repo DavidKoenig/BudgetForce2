@@ -4,26 +4,39 @@
  */
 package budgetforce.control.resources;
 
+import budgetforce.control.FileHandle;
+import budgetforce.model.Budget;
 import budgetforce.model.DatabaseManager;
+import budgetforce.model.Login;
+import budgetforce.model.Outgoing;
 import budgetforce.model.Receipt;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.UriInfo;
+import com.sun.jersey.core.header.FormDataContentDisposition;
+import com.sun.jersey.multipart.FormDataParam;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
+import org.omg.PortableServer.REQUEST_PROCESSING_POLICY_ID;
 
 /**
  * REST Web Service
  *
  * @author Soi Fon
  */
-@Path("/receipt")
+@Path("/outgoing/{outgoingID}/receipt")
 public class ReceiptResource 
 {
 
@@ -36,19 +49,41 @@ public class ReceiptResource
     @Produces("application/json")
     public Receipt getReceiptById(@PathParam("id") Integer _Id) 
     {
-        //return DatabaseManager.getDatabaseManager().getReceiptByID(_Id);
-        return new Receipt();
+        return DatabaseManager.getDatabaseManager().getReceiptByID(_Id);
     }
 
-    //post for creating a new entry
     @POST
-    @Consumes("application/json")
-    @Produces("application/json")
-    public Response postReceipt(Receipt _Receipt) 
-    {     
-        //int id = DatabaseManager.getDatabaseManager().insertReceipt(_Receipt);
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces("application/json")    
+    public Response uploadFile(@FormDataParam("file") InputStream uploadedInputStream, 
+                               @FormDataParam("file") FormDataContentDisposition fileDetail,
+                               @PathParam("outgoingID") int outgoingID) 
+    {
+        String fileDestination[];
         
-        return Response.status(201).entity(_Receipt).build();
+        Outgoing outgoing = DatabaseManager.getDatabaseManager().getOutgoingByID(outgoingID);
+        Budget budget = DatabaseManager.getDatabaseManager().getBudgetByID(outgoing.getBudgetId());
+        Login login = DatabaseManager.getDatabaseManager().getLoginByPersonID(budget.getPersonId());      
+    
+        try 
+        {
+            FileHandle.CreateUserDirectory(login.getUsername());
+            FileHandle.CreateUserSubDirectory(login.getUsername());
+            fileDestination = FileHandle.CreateFile(uploadedInputStream, fileDetail.getFileName(),login.getUsername(), Receipt.NewReceiptID());
+        } 
+        catch (IOException ex) 
+        {
+            return Response.status(Response.Status.BAD_REQUEST).entity(null).build();
+        }
+        
+        Receipt r = new Receipt();
+        r.setPersonID(login.getPersondId());
+        r.setOutgoingID(outgoingID);     
+        r.setPath(fileDestination[0]);
+        r.setFilename(fileDestination[1]);
+        
+        DatabaseManager.getDatabaseManager().insertReceipt(r);
+        return Response.status(201).entity(r).build();
     }
     
     //put for updating an entry
@@ -58,7 +93,7 @@ public class ReceiptResource
     @Produces("application/json")
     public Response putReceipt(@PathParam("id") Integer _Id, Receipt _Receipt) 
     {
-        boolean successful = true;//DatabaseManager.getDatabaseManager().updateReceipt(_Receipt);
+        boolean successful = DatabaseManager.getDatabaseManager().updateReceipt(_Receipt);
         
         return Response.status(201).entity(successful).build();
     }
@@ -69,7 +104,7 @@ public class ReceiptResource
     @Produces("application/json")
     public Response deleteReceipt(@PathParam("id") Integer _Id) 
     {
-        boolean successful = true;//DatabaseManager.getDatabaseManager().deleteReceipt(_Id);
+        boolean successful = DatabaseManager.getDatabaseManager().deleteReceipt(_Id);
         
         return Response.status(201).entity(successful).build();
     }

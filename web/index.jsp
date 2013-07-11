@@ -35,5 +35,15 @@
                     </form>
                 <%}
             }%>
+            
+            <form method="POST" action="api/outgoing/7/receipt" enctype="multipart/form-data" >
+                File:
+                <input type="file" name="file" id="file" /><br/>
+                <input type="hidden" value="20" name="personID" id ="personID" />
+                <input type="hidden" value="2" name="outgoingID" id ="outgoingID" />
+                <input type="submit" value="Upload" name="upload" id="upload" />
+            </form>
+            
+            
     </body>
 </html>
