@@ -23,7 +23,7 @@ public class SecretMaker
     
     public String makeSecretSHA512(String _Values)
     {
-        String hashed = Crypt.crypt("secret", "$6$" +_Values + this.m_Secret + "$");
+        String hashed = Crypt.crypt("secret", "$6$" + _Values + this.m_Secret + "$");
         return hashed;
     }
  
