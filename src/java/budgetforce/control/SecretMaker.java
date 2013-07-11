@@ -21,11 +21,12 @@ public class SecretMaker
         return m_SecretMaker;
     }
     
-    public String makeSecret(String _Values)
+    public String makeSecretSHA512(String _Values)
     {
         String hashed = Crypt.crypt("secret", "$6$" +_Values + this.m_Secret + "$");
         return hashed;
     }
+ 
     
     private static SecretMaker m_SecretMaker = null;
     private String m_Secret;

@@ -2096,6 +2096,149 @@ public class DatabaseManager {
     // </editor-fold>
     
     
+    // <editor-fold defaultstate="collapsed" desc="receipt">
+    public Receipt getReceiptByID(int _id)
+    {
+        Receipt receipt = new Receipt();
+        ResultSet rs = null;
+        
+        try
+        {
+            PreparedStatement st = connection.prepareStatement("SELECT * FROM receipt WHERE id = ?");
+            
+            st.setInt(1, _id);
+            rs = st.executeQuery();
+        }
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem selecting receipt by id from database");
+        }
+        
+        try 
+        {
+            while(rs.next())
+            {  
+                rs.getInt("id");
+                rs.getString("path");
+                rs.getString("filename");
+                rs.getInt("outgoing_id");
+                rs.getInt("person_id");
+            }
+            rs.close();
+        } 
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem mapping selected receipt by id, result could be null");
+        }
+
+        return receipt;
+    }
+     
+    
+    public int insertReceipt(Receipt _receipt)
+    {
+        ResultSet rs    = null;
+        int id          = 0;
+        
+        try
+        {
+            PreparedStatement st = connection.prepareStatement("INSERT INTO receipt(path, filename, outgoing_id, person_id) "
+                    + " VALUES(?, ?, ?, ?)");
+           
+            st.setString(1, _receipt.getPath());
+            st.setString(2, _receipt.getFilename());
+            st.setInt(3, _receipt.getOutgoingID());
+            st.setInt(4, _receipt.getPersonID());
+           
+            st.executeUpdate();
+        }
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem inserting project into database");
+        }
+        
+        //get ID
+        try
+        {
+            PreparedStatement st = connection.prepareStatement("SELECT MAX(id) FROM receipt");
+           
+            rs = st.executeQuery();
+        }
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem selecting id from inserted receipt from database");
+        }
+        
+        try 
+        {
+            while(rs.next())
+            {  
+                id = rs.getInt(1);
+            }
+            rs.close();
+        } 
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem mapping id from inserted project");
+        }
+        
+        return id;
+    }
+    
+    
+    public boolean updateReceipt(Receipt _receipt)
+    {
+        try
+        {
+            PreparedStatement st = connection.prepareStatement("UPDATE receipt SET path = ?, filename = ?, outgoing_id = ?, person_id = ?"
+                    + " WHERE id = ?");
+           
+            st.setString(1, _receipt.getPath());
+            st.setString(2, _receipt.getFilename());
+            st.setInt(3, _receipt.getOutgoingID());
+            st.setInt(4, _receipt.getPersonID());
+            st.setInt(5, _receipt.getID());
+           
+            st.executeUpdate();
+        }
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem updating receipt to database");
+            return false;
+        }
+
+        return true;
+    }
+    
+    
+    public boolean deleteReceipt(int _id)
+    {
+        try
+        {
+            PreparedStatement st = connection.prepareStatement("DELETE FROM receipt"
+                    + " WHERE id = ?");
+            
+            st.setInt(1, _id);
+            
+            st.executeUpdate();
+        }
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem deleting receipt from database");
+            return false;
+        }
+ 
+        return true;
+    }
+    // </editor-fold>
+    
     // <editor-fold defaultstate="collapsed" desc="systemNotifcation">
     public SystemNotification getSystemNotificationByID(int _id)
     {
