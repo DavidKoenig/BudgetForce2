@@ -2325,11 +2325,11 @@ public class DatabaseManager {
         {
             while(rs.next())
             {  
-                rs.getInt("id");
-                rs.getString("path");
-                rs.getString("filename");
-                rs.getInt("outgoing_id");
-                rs.getInt("person_id");
+                receipt.setID(rs.getInt("id"));
+                receipt.setPath(rs.getString("path"));
+                receipt.setFilename(rs.getString("filename"));
+                receipt.setOutgoingID(rs.getInt("outgoing_id"));
+                receipt.setPersonID(rs.getInt("person_id"));
             }
             rs.close();
         } 
@@ -2338,7 +2338,7 @@ public class DatabaseManager {
         {
             System.out.println("Problem mapping selected receipt by id, result could be null");
         }
-
+        
         return receipt;
     }
      

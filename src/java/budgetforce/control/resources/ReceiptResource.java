@@ -10,26 +10,21 @@ import budgetforce.model.DatabaseManager;
 import budgetforce.model.Login;
 import budgetforce.model.Outgoing;
 import budgetforce.model.Receipt;
+
 import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataParam;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
-import org.omg.PortableServer.REQUEST_PROCESSING_POLICY_ID;
 
 /**
  * REST Web Service
