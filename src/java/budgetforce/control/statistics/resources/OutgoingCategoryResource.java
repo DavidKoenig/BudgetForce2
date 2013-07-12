@@ -26,6 +26,7 @@ public class OutgoingCategoryResource {
 
     public OutgoingCategoryResource() 
     {
+        
     }
 
     @GET

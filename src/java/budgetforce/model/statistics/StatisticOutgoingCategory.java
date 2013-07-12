@@ -93,6 +93,12 @@ public class StatisticOutgoingCategory {
         this.m_UserId = _UserId;
     }
     
+    public StatisticOutgoingCategory() 
+    {
+        this.m_OverallPercentage = 0.0f;
+        this.m_Sum               = 0.0f;
+    }
+    
     //---------------------------------------------------
     // Private variables
     //---------------------------------------------------
