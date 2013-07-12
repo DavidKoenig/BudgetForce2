@@ -1441,6 +1441,145 @@ public class DatabaseManager {
     // </editor-fold>
     
     
+    // <editor-fold defaultstate="collapsed" desc="login_token">
+    public LoginToken getLoginTokenByID(int _id)
+    {
+        LoginToken lgToken = new LoginToken();
+        ResultSet rs = null;
+        
+        try
+        {
+            PreparedStatement st = connection.prepareStatement("SELECT * FROM login_token WHERE id = ?");
+            
+            st.setInt(1, _id);
+            rs = st.executeQuery();
+        }
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem selecting login token by id from database");
+        }
+        
+        try 
+        {
+            while(rs.next())
+            {  
+                lgToken.setId(rs.getInt("id"));
+                lgToken.setTimestamp(rs.getTimestamp("timestamp"));
+                lgToken.setToken(rs.getString("token"));
+            }
+            rs.close();
+        } 
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem mapping selected login token by id, result could be null");
+        }
+
+        return lgToken;
+    }
+      
+    
+    public int insertLoginToken(LoginToken _lgToken)     //returns the id of the inserted person
+    {       
+        ResultSet rs = null;
+        int id = 0;
+        
+        try
+        {
+            PreparedStatement st = connection.prepareStatement("INSERT INTO login_token(token,"
+                    + " timestamp) VALUES(?, ?)");
+           
+            st.setString(1, _lgToken.getToken());
+            st.setTimestamp(2, _lgToken.getTimestamp());
+           
+            st.executeUpdate();
+        }
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem inserting login token into database");
+        }
+
+        //get ID
+        try
+        {
+            PreparedStatement st = connection.prepareStatement("SELECT MAX(id) FROM login token");
+           
+            rs = st.executeQuery();
+        }
+        
+        catch(Exception e)
+        {
+            
+            System.out.println("Problem selecting id from inserted login token from database");
+        }
+        
+        try 
+        {
+            while(rs.next())
+            {  
+                id = rs.getInt(1);
+            }
+            rs.close();
+        } 
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem mapping id from inserted login token");
+        }
+
+        return id;
+    }
+      
+    
+    public boolean updateLoginToken(LoginToken _lgToken)
+    {
+        try
+        {
+            PreparedStatement st = connection.prepareStatement("UPDATE login_token SET token = ?, "
+                    + " timestamp = ? WHERE id = ?");
+           
+            st.setString(1, _lgToken.getToken());
+            st.setTimestamp(2, _lgToken.getTimestamp());
+            st.setInt(3, _lgToken.getId());
+           
+            st.executeUpdate();
+        }
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem updating login token to database");
+            return false;
+        }
+ 
+        return true;
+    }
+       
+    
+    public boolean deleteLoginToken(int _id)
+    { 
+        try
+        {
+            PreparedStatement st = connection.prepareStatement("DELETE FROM login_token"
+                    + " WHERE id = ?");
+            
+            st.setInt(1, _id);
+            
+            int result = st.executeUpdate();
+        }
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem deleting login token from database");
+            return false;
+        }
+
+        return true;
+    }
+     // </editor-fold>
+    
+    
     // <editor-fold defaultstate="collapsed" desc="outgoing">
     public Outgoing getOutgoingByID(int _id)
     {
