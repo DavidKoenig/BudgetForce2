@@ -772,6 +772,73 @@ public class DatabaseManager {
         return category;
     }
     
+    public ArrayList<Category> getCategoryByOutgoingId(int _OutgoingId)
+    {
+        ResultSet rs = null;
+        
+        try
+        {
+            PreparedStatement st = connection.prepareStatement("SELECT c.id AS CategoryId, c.name AS CategoryName FROM outgoing o"
+                                                              +" JOIN categroy c ON o.categoryID = c.id"
+                                                              +" WHERE o.id = ?");
+            st.setInt(1, _OutgoingId);
+            rs = st.executeQuery();
+        }
+        catch(Exception e)
+        {
+            System.out.println("Problem when selecting category by id from database");
+        }
+        
+        return this.fillCategoryContainer(rs);
+    }
+    
+    public ArrayList<Category> getCategoryByPersonId(int _PersonId)
+    {
+        ResultSet rs = null;
+        
+        ArrayList<Category> categoryContainer = new ArrayList<Category>();
+        
+        try
+        {
+            PreparedStatement st = connection.prepareStatement("SELECT c.id AS CategoryId, c.name AS CategoryName FROM person p"
+                                                              +" JOIN budget b ON p.id = b.personID"
+                                                              +" JOIN outgoing o ON b.id = o.budgetID"
+                                                              +" JOIN categroy c ON o.categoryID = c.id"
+                                                              +" WHERE p.id = ?");
+            st.setInt(1, _PersonId);
+            rs = st.executeQuery();
+        }
+        catch(Exception e)
+        {
+            System.out.println("Problem when selecting category by id from database");
+        }
+        
+        return this.fillCategoryContainer(rs);
+    }
+    
+    public ArrayList<Category> fillCategoryContainer(ResultSet _Rs)
+    {
+        ArrayList<Category> categoryContainer = new ArrayList<Category>();
+        
+        try {
+            while(_Rs.next())
+            {  
+                Category category = new Category();
+                category.setId(_Rs.getInt("id"));
+                category.setName(_Rs.getString("name"));
+                
+                categoryContainer.add(category);
+            }
+        } 
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem when mapping category selected by id, to an instance");
+        }
+        
+        return categoryContainer;
+    }
+    
     
     public int insertCategory(Category _category)
     {
