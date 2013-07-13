@@ -4,6 +4,8 @@
  */
 package budgetforce;
 
+import budgetforce.control.DateHandle;
+import budgetforce.control.Income;
 import budgetforce.model.DatabaseManager;
 import budgetforce.model.Receipt;
 
@@ -22,7 +24,9 @@ public class EntryPoint implements ServletContextListener
     @Override
     public void contextInitialized(ServletContextEvent sce) 
     {
+        DateHandle.Initialize();
         Receipt.SetReceiptCount(DatabaseManager.getDatabaseManager().getMaxReceiptID());
+
     }
 
     @Override

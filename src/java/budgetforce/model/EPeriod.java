@@ -12,6 +12,7 @@ public enum EPeriod {
     ONCE,
     HOUR,
     DAY,
+    WEEK,
     MONTH,
     QUARTER,
     YEAR;

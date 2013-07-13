@@ -45,5 +45,10 @@
             </form>
             
             
+            <form method="POST" action="register" enctype="multipart/form-data" >
+                <input type="submit" value="Test" name="upload" id="upload" />
+            </form>          
+                    
+
     </body>
 </html>
