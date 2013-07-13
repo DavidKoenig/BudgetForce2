@@ -85,12 +85,12 @@ public class Income
                     float days = end.getDate() - start.getDate() + 1;                    
                     switch(income.getPeriod())
                     {
-                        case ONCE   : completteIncome +=  income.getAmount();                   break;
-                        case DAY    : completteIncome +=  income.getAmount() *        days;     break;
-                        case WEEK   : completteIncome +=  income.getAmount() *       (days / 7);break;
-                        case MONTH  : completteIncome +=  income.getAmount() *       (days / DateHandle.GetDaysOfMonth(year, month));break;
-                        case QUARTER: completteIncome += (income.getAmount() /  3) * (days / DateHandle.GetDaysOfMonth(year, month));break;
-                        case YEAR   : completteIncome += (income.getAmount() / 12) * (days / DateHandle.GetDaysOfMonth(year, month));break;
+                        case ONCE   : completteIncome += income.getAmount();             break;
+                        case DAY    : completteIncome += income.getAmount() *  days;     break;
+                        case WEEK   : completteIncome += income.getAmount() * (days / 7);break;
+                        case MONTH  : completteIncome += income.getAmount();break; //there should not be a month , quarter or year period with 
+                        case QUARTER: completteIncome += income.getAmount();break; //a start and end date within a month anyway, so just the full amount will be
+                        case YEAR   : completteIncome += income.getAmount();break; //added in this case
                     }
                 }            
             }
