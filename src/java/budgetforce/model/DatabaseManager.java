@@ -500,7 +500,7 @@ public class DatabaseManager {
             {  
                 Budget budget = new Budget();
                 
-                budget.setBudgetId(rs.getInt("id"));
+                budget.setId(rs.getInt("id"));
                 budget.setAmount(rs.getFloat("amount"));
                 budget.setCurrency(rs.getString("currency"));
                 budget.setName(rs.getString("name"));

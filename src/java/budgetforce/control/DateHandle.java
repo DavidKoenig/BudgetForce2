@@ -1,14 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package budgetforce.control;
 
-import budgetforce.model.EPeriod;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import org.joda.time.Interval;
 
 /**
  *
@@ -17,9 +12,9 @@ import org.joda.time.Interval;
 public class DateHandle 
 {
 
-    static Calendar c;
+    public static Calendar c;
       
-    static GregorianCalendar greg;
+    public static GregorianCalendar greg;
     
     public static void Initialize()
     {
@@ -27,51 +22,62 @@ public class DateHandle
         greg = new GregorianCalendar();
     }
     
-    public static boolean TimeStampIntersectsCurrentDate(Timestamp start, Timestamp end, EPeriod period)
+    public static int Compare(Timestamp t1, Timestamp t2)
     {
-        boolean intersect = false;
+        return Compare(t1, t2.getYear(),t2.getMonth(), t2.getDate());
+    }
+    
+    public static int Compare(Timestamp t, int year)
+    {
+        return Compare(t, year, t.getMonth(), t.getDate());
+    }
+    
+    public static int Compare(Timestamp t, int year, int month)
+    {
+        return Compare(t, year, month, t.getDate());
+    }            
+    
+    public static int Compare(Timestamp t, int year, int month, int day)
+    {
+        year -= 1900;
         
-        int day   = c.get(Calendar.DAY_OF_MONTH);
-        int month = c.get(Calendar.MONTH);
-        int year  = c.get(Calendar.YEAR);
-        
-        
-        if(start.getYear() == year)
+        if(t.getYear() < year)
         {
-            //period starts before and ends after this month
-            if(start.getMonth() < month && end.getMonth() > month)
-            {
-                
-            }
-            //Period ends this month
-            if(start.getMonth() < month && end.getMonth() == month)
-            {
-                
-            }
-            //Period starts this month
-            if(start.getMonth() == month && end.getMonth() > month)
-            {
-                
-            }
-            //Period starts and ends this month
-            if(start.getMonth() == month && end.getMonth() == month)
-            {
-                
-            }            
+            return -1;
         }
-       
-        
-        switch(period)
+        else 
         {
-            case DAY    :  break;
-            case WEEK   :  break;
-            case MONTH  :  break;
-            case QUARTER:  break;
-            case YEAR   :  break;
+            if(t.getYear() > year)
+            {
+                return 1;
+            }
         }
         
+        if(t.getMonth() < month)
+        {
+            return -1;
+        }
+        else 
+        {
+            if(t.getMonth() > month)
+            {
+                return 1;
+            }
+        }
+    
+        if(t.getDate() < day)
+        {
+            return -1;
+        }
+        else 
+        {
+            if(t.getDate() > day)
+            {
+                return 1;
+            }
+        } 
         
-        return intersect;   
+        return 0;
     }
     
     /**

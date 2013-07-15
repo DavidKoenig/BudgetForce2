@@ -7,7 +7,9 @@ package budgetforce.control.servlets;
 
 
 
+import budgetforce.control.Budget;
 import budgetforce.control.Income;
+import budgetforce.control.Outgoing;
 import budgetforce.model.DatabaseManager;
 import budgetforce.model.Login;
 import budgetforce.model.Person;
@@ -37,6 +39,8 @@ public class register extends HttpServlet {
         try 
         {
             Income i = new Income(20);
+            Outgoing o = new Outgoing(20);
+            Budget b = new Budget(20);
             
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
@@ -45,7 +49,11 @@ public class register extends HttpServlet {
             out.println("<title>Servlet </title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println(i.MonthIncome(2013, 6)); //august 2013
+            out.println("Income:   " +i.MonthIncome(2013, 6)); 
+            out.println("<br>");
+            out.println("Budget:   " + b.MonthBudget()); 
+            out.println("<br>");
+            out.println("Outgoing: " + o.MonthOutgoing(2013, 6));
             out.println("</body>");
             out.println("</html>");
         } 
