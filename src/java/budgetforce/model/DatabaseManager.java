@@ -2480,6 +2480,61 @@ public class DatabaseManager {
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="systemNotifcation">
+    public ArrayList<SystemNotification> getSystemNotifications()
+    {
+        ArrayList<SystemNotification> notifications = new ArrayList<SystemNotification>();
+        ResultSet rs = null;
+        
+        try
+        {
+            PreparedStatement st = connection.prepareStatement("SELECT * FROM system_notification");
+            
+            rs = st.executeQuery();
+        }     
+        catch(Exception e)
+        {
+            System.out.println("Problem selecting system notification by id from database");
+        }
+        
+        try 
+        {   
+            while(rs.next())
+            {  
+                SystemNotification notification = new SystemNotification();
+                
+                notification.setMessage(rs.getString("message"));
+                
+                String type = rs.getString("type");
+                type.toUpperCase();
+                
+                if(type.equals(SystemNotification.ENotificationType.ERROR))
+                {
+                    notification.setType(SystemNotification.ENotificationType.ERROR);
+                }
+                
+                else if(type.equals(SystemNotification.ENotificationType.NEUTRAL))
+                {
+                    notification.setType(SystemNotification.ENotificationType.NEUTRAL);
+                }
+                
+                else if(type.equals(SystemNotification.ENotificationType.SUCCESS))
+                {
+                    notification.setType(SystemNotification.ENotificationType.SUCCESS);
+                }
+                
+                notifications.add(notification);
+            }
+            rs.close();
+        } 
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem mapping system notification selected by id, result could be null");
+        }
+
+        return notifications;
+    }
+    
     public SystemNotification getSystemNotificationByID(int _id)
     {
         SystemNotification notification = new SystemNotification();
