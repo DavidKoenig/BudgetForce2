@@ -44,6 +44,7 @@ public class LoginResource {
 
     //post for creating a new entry
     @POST
+    @Path("/create")
     @Consumes("application/json")
     @Produces("application/json")
     public Response postLogin(Login _Login) 

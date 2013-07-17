@@ -691,7 +691,7 @@ public class DatabaseManager {
             {  
                 Budget budget = new Budget();
                 
-                budget.setBudgetId(rs.getInt("id"));
+                budget.setId(rs.getInt("id"));
                 budget.setAmount(rs.getFloat("amount"));
                 budget.setCurrency(rs.getString("currency"));
                 budget.setName(rs.getString("name"));
@@ -961,6 +961,73 @@ public class DatabaseManager {
         }
         
         return category;
+    }
+    
+    public ArrayList<Category> getCategoryByOutgoingId(int _OutgoingId)
+    {
+        ResultSet rs = null;
+        
+        try
+        {
+            PreparedStatement st = connection.prepareStatement("SELECT c.id AS CategoryId, c.name AS CategoryName FROM outgoing o"
+                                                              +" JOIN categroy c ON o.categoryID = c.id"
+                                                              +" WHERE o.id = ?");
+            st.setInt(1, _OutgoingId);
+            rs = st.executeQuery();
+        }
+        catch(Exception e)
+        {
+            System.out.println("Problem when selecting category by id from database");
+        }
+        
+        return this.fillCategoryContainer(rs);
+    }
+    
+    public ArrayList<Category> getCategoryByPersonId(int _PersonId)
+    {
+        ResultSet rs = null;
+        
+        ArrayList<Category> categoryContainer = new ArrayList<Category>();
+        
+        try
+        {
+            PreparedStatement st = connection.prepareStatement("SELECT c.id AS CategoryId, c.name AS CategoryName FROM person p"
+                                                              +" JOIN budget b ON p.id = b.personID"
+                                                              +" JOIN outgoing o ON b.id = o.budgetID"
+                                                              +" JOIN categroy c ON o.categoryID = c.id"
+                                                              +" WHERE p.id = ?");
+            st.setInt(1, _PersonId);
+            rs = st.executeQuery();
+        }
+        catch(Exception e)
+        {
+            System.out.println("Problem when selecting category by id from database");
+        }
+        
+        return this.fillCategoryContainer(rs);
+    }
+    
+    public ArrayList<Category> fillCategoryContainer(ResultSet _Rs)
+    {
+        ArrayList<Category> categoryContainer = new ArrayList<Category>();
+        
+        try {
+            while(_Rs.next())
+            {  
+                Category category = new Category();
+                category.setId(_Rs.getInt("id"));
+                category.setName(_Rs.getString("name"));
+                
+                categoryContainer.add(category);
+            }
+        } 
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem when mapping category selected by id, to an instance");
+        }
+        
+        return categoryContainer;
     }
     
     
@@ -2449,11 +2516,11 @@ public class DatabaseManager {
         {
             while(rs.next())
             {  
-                rs.getInt("id");
-                rs.getString("path");
-                rs.getString("filename");
-                rs.getInt("outgoing_id");
-                rs.getInt("person_id");
+                receipt.setID(rs.getInt("id"));
+                receipt.setPath(rs.getString("path"));
+                receipt.setFilename(rs.getString("filename"));
+                receipt.setOutgoingID(rs.getInt("outgoing_id"));
+                receipt.setPersonID(rs.getInt("person_id"));
             }
             rs.close();
         } 
@@ -2462,7 +2529,7 @@ public class DatabaseManager {
         {
             System.out.println("Problem mapping selected receipt by id, result could be null");
         }
-
+        
         return receipt;
     }
      
@@ -2605,6 +2672,61 @@ public class DatabaseManager {
     
     
     // <editor-fold defaultstate="collapsed" desc="systemNotifcation">
+    public ArrayList<SystemNotification> getSystemNotifications()
+    {
+        ArrayList<SystemNotification> notifications = new ArrayList<SystemNotification>();
+        ResultSet rs = null;
+        
+        try
+        {
+            PreparedStatement st = connection.prepareStatement("SELECT * FROM system_notification");
+            
+            rs = st.executeQuery();
+        }     
+        catch(Exception e)
+        {
+            System.out.println("Problem selecting system notification by id from database");
+        }
+        
+        try 
+        {   
+            while(rs.next())
+            {  
+                SystemNotification notification = new SystemNotification();
+                
+                notification.setMessage(rs.getString("message"));
+                
+                String type = rs.getString("type");
+                type.toUpperCase();
+                
+                if(type.equals(SystemNotification.ENotificationType.ERROR))
+                {
+                    notification.setType(SystemNotification.ENotificationType.ERROR);
+                }
+                
+                else if(type.equals(SystemNotification.ENotificationType.NEUTRAL))
+                {
+                    notification.setType(SystemNotification.ENotificationType.NEUTRAL);
+                }
+                
+                else if(type.equals(SystemNotification.ENotificationType.SUCCESS))
+                {
+                    notification.setType(SystemNotification.ENotificationType.SUCCESS);
+                }
+                
+                notifications.add(notification);
+            }
+            rs.close();
+        } 
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem mapping system notification selected by id, result could be null");
+        }
+
+        return notifications;
+    }
+    
     public SystemNotification getSystemNotificationByID(int _id)
     {
         SystemNotification notification = new SystemNotification();
