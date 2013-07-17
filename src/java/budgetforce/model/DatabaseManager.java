@@ -1623,6 +1623,52 @@ public class DatabaseManager {
         return outgoing;
     }
     
+    public ArrayList<Outgoing> getOutgoingByPersonID(int _PersonID)
+    {
+        ArrayList arrayOutgoing = new ArrayList<Outgoing>();
+        
+        ResultSet rs = null;
+        
+        try
+        {
+            PreparedStatement st = connection.prepareStatement("SELECT o.id AS Id, o.amount AS Amount, o.start AS Start, o.ende AS Ende, o.timestamp AS Timestamp, o.budgetID AS BudgetId, o.categoryID AS CategoryId, o.period_id AS PeriodId"
+                                                              +" FROM person p JOIN budget b ON b.personID = p.id JOIN outgoing o ON o.budgetID = b.id WHERE p.id = ? ");
+            
+            st.setInt(1, _PersonID);
+            rs = st.executeQuery();
+        }
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem selecting outgoings by person from database");
+        }
+        
+        try {
+            while(rs.next())
+            {         
+                Outgoing tmpOutgoing       = new Outgoing();
+                
+                tmpOutgoing.setId(rs.getInt("Id"));
+                tmpOutgoing.setAmount(rs.getFloat("Amount"));
+                tmpOutgoing.setStart(rs.getTimestamp("Start"));
+                tmpOutgoing.setEnd(rs.getTimestamp("Ende"));
+                tmpOutgoing.setTimeStamp(rs.getTimestamp("timestamp"));
+                tmpOutgoing.setPersonId(_PersonID);
+                tmpOutgoing.setBudgetId(rs.getInt("BudgetId"));
+                tmpOutgoing.setCategoryId(rs.getInt("CategoryId"));
+                tmpOutgoing.setPeriod(this.getPeriodByID(rs.getInt("period_id"))); 
+
+                arrayOutgoing.add(tmpOutgoing);       
+            }  
+        } 
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem when mapping income by person id to instance, result could be null");
+        }
+        
+        return arrayOutgoing;
+    }
     
     public ArrayList<Outgoing> getOutgoingByBudgetID(int _budgetID)
     {
