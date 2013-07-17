@@ -55,6 +55,8 @@ public class DatabaseManager {
     // </editor-fold>
     
     
+    //helper methods
+    
     // <editor-fold defaultstate="collapsed" desc="connection">
     private void establishConnection()
     {
@@ -197,6 +199,9 @@ public class DatabaseManager {
     }
     // </editor-fold>
     
+    
+    
+    //methods that will be mapped on model classes
     
     // <editor-fold defaultstate="collapsed" desc="address">
     public Address getAddressByID(int _id)
@@ -375,6 +380,192 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem when mapping id from inserted address into int value");
+        }
+        
+        return id;
+    }
+    
+    
+    public boolean updateAddress(Address _address)
+    {       
+        try
+        {
+            PreparedStatement st = connection.prepareStatement("UPDATE address SET"
+                    + " \"streetNmbr\" = ?, city = ?, zipcode = ?, country = ?,"
+                    + " type = ?, \"personID\" = ?, \"addressAddition\" = ?"
+                    + " WHERE id = ? ");
+            
+            st.setString(1, _address.getStreetNmbr());
+            st.setString(2, _address.getCity());
+            st.setString(3, _address.getZipCode());
+            st.setString(4, _address.getCountry());
+            st.setString(5, _address.getType().name()); 
+            st.setInt(6, _address.getPersondId());
+            st.setString(7, _address.getAddressAddition());
+            st.setInt(8, _address.getId());
+            
+            st.executeUpdate();
+        }
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem when updating address to the database.");
+            return false;
+        }
+
+        return true;
+    }
+    
+    
+    public boolean deleteAddress(int _Id)
+    {
+        try
+        {
+            PreparedStatement st = connection.prepareStatement("DELETE FROM address WHERE id = ?");
+            
+            st.setInt(1, _Id);
+            st.executeUpdate();
+        }
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem when deleting an address from database, maybe id not found");
+            return false;
+        }
+ 
+        return true;
+    }
+    // </editor-fold>
+    
+    
+    // <editor-fold defaultstate="collapsed" desc="transToken">
+    public TransToken getTransTokenByID(int _id)
+    {  
+        ResultSet rs = null;
+        TransToken transToken = new TransToken();
+        
+        try
+        {
+            PreparedStatement st = connection.prepareStatement("SELECT * FROM transaction_token WHERE id = ?");
+            st.setInt(1, _id);
+            rs = st.executeQuery();
+        }
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem when getting an transaction token by id from database!");
+        }
+        
+        try 
+        {
+            while(rs.next())
+            {  
+                transToken.setId(rs.getInt("id"));
+                transToken.setPersonId(rs.getInt("person_id"));
+                transToken.setTimestamp(rs.getTimestamp("timestamp"));
+                transToken.setToken(rs.getString("token"));
+            }
+            rs.close();
+        } 
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem when mapping an transaction token by id from database into an instance, result could be null!");
+        }
+        
+        return transToken;
+    }
+    
+    
+    public ArrayList<TransToken> getTransTokenByPersonID(int _personID)
+    {     
+        ArrayList transTokenArray = new ArrayList<TransToken>();
+        ResultSet rs = null;
+        
+        try
+        {
+            PreparedStatement st = connection.prepareStatement("SELECT * FROM transaction_token WHERE \"personID\" = ?");
+            st.setInt(1, _personID);
+            rs = st.executeQuery();
+        }
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem in selecting an transaction token from database by person id");
+        }
+        
+        try 
+        {
+            while(rs.next())
+            {  
+                TransToken transToken = new TransToken();
+                
+                transToken.setId(rs.getInt("id"));
+                transToken.setPersonId(rs.getInt("person_id"));
+                transToken.setTimestamp(rs.getTimestamp("timestamp"));
+                transToken.setToken("token");
+                
+                transTokenArray.add(transToken);
+            }
+            rs.close();
+        } 
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem when mapping transaction token selected by person id from database to a new instance, result could be null");
+        }
+        
+        return transTokenArray;
+    }
+    
+    
+    public int insertTransToken(TransToken _transToken)
+    {        
+        ResultSet rs = null;
+        int id = 0;
+        
+        try
+        {
+            PreparedStatement st = connection.prepareStatement("INSERT INTO transaction_token(token,"
+                    + " timepstamp, person_id)"
+                    + " VALUES(?, ?, ?)");
+            st.setString(1, _transToken.getToken());
+            st.setTimestamp(2, _transToken.getTimestamp());
+            st.setInt(3, _transToken.getPersonId());
+            
+            st.executeUpdate();
+        }
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem in inserting a transaction token into database.");
+        }
+        
+         //get ID
+        try
+        {
+            PreparedStatement st = connection.prepareStatement("SELECT MAX(id) FROM transaction_token");
+           
+            rs = st.executeQuery();
+        }
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem when selecting id from inserted transaction token");
+        }
+        
+        try 
+        {
+            while(rs.next())
+            {  
+                id = rs.getInt(1);
+            }
+            rs.close();
+        } 
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem when mapping id from inserted transaction token into int value");
         }
         
         return id;
@@ -2411,6 +2602,7 @@ public class DatabaseManager {
     }
     
     // </editor-fold>
+    
     
     // <editor-fold defaultstate="collapsed" desc="systemNotifcation">
     public SystemNotification getSystemNotificationByID(int _id)
