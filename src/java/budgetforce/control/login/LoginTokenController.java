@@ -26,7 +26,7 @@ public class LoginTokenController
                                
         return m_LoginTokenController;
     }
-    * */
+    */
     
     //synchronized, because same timestamp would cause same login token --> must be unique
     public synchronized String getLoginToken()

@@ -3,6 +3,8 @@ package budgetforce.control.resources;
 
 // <editor-fold defaultstate="collapsed" desc="imports">
 import budgetforce.model.login.Login;
+import budgetforce.control.login.LoginController;
+import budgetforce.control.login.LoginTokenController;
 import budgetforce.model.DatabaseManager;
 
 import javax.ws.rs.core.Response;
@@ -32,9 +34,28 @@ public class LoginResource {
     }
 
     @GET
+    @Path("/logintoken")
+    @Produces("application/json")
+    public String getloginToken() 
+    {
+        LoginTokenController loginTokenController = new LoginTokenController();
+        return loginTokenController.getLoginToken();
+    }
+    
+    @POST
+    @Path("/dologin")
+    @Produces("application/json")
+    @Consumes("application/json")
+    public String login()
+    {
+        return "test";
+    }
+    
+    /*
+    @GET
     @Path("{user}/{password}")
     @Produces("application/json")
-    public int login(@PathParam("user") String _Username, @PathParam("password") String _Password) 
+    public int getPersonIDByLogin(@PathParam("user") String _Username, @PathParam("password") String _Password) 
     {
         Login login = DatabaseManager.getDatabaseManager().getLoginByUsername(_Username);
         
@@ -55,10 +76,11 @@ public class LoginResource {
         
         return Response.status(201).entity(_Login).build();
     }
+    */
     
     //put for updating an entry
     @PUT
-    @Path("{id}")
+    @Path("/update/{id}")
     @Consumes("application/json")
     @Produces("application/json")
     public Response putLogin(@PathParam("id") Integer _Id, Login _Login) 
@@ -70,7 +92,7 @@ public class LoginResource {
     }
     
     @DELETE
-    @Path("{username}")
+    @Path("/delete/{username}")
     @Consumes("application/json")
     @Produces("application/json")
     public Response deleteLogin(@PathParam("id") String _Username) 
