@@ -21,7 +21,7 @@ import javax.ws.rs.Produces;
  *
  * @author David
  */
-@Path("statistics/outgoingCategory")
+@Path("statistics/outgoingCategory/")
 public class OutgoingCategoryResource {
 
     public OutgoingCategoryResource() 

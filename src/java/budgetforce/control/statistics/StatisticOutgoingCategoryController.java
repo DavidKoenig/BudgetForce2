@@ -22,6 +22,11 @@ public class StatisticOutgoingCategoryController
         StatisticOutgoingCategory Statistic = new StatisticOutgoingCategory();
         
         //---------------------------------------------------
+        // get Category
+        Statistic.setCategory(DatabaseManager.getDatabaseManager().getCategoryByID(_CategoryId));
+        //---------------------------------------------------
+        
+        //---------------------------------------------------
         // get Outgoings
         Statistic.setOutgoings(DatabaseManager.getDatabaseManager().getOutgoingByCategoryID(_CategoryId));
         //---------------------------------------------------
