@@ -74,6 +74,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem when connecting to the database");
+            System.out.println(e.toString());
         }
     }
     
@@ -89,6 +90,7 @@ public class DatabaseManager {
             catch(Exception e)
             {
                 System.out.println("Problem when closing the connection to the database");
+                System.out.println(e.toString());
             }
         }
     }
@@ -112,6 +114,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem selecting period by id from database");
+            System.out.println(e.toString());
         }
         
         try 
@@ -157,6 +160,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem when mapping period by id to instance, result could be null");
+            System.out.println(e.toString());
         }
   
         return period;
@@ -178,6 +182,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem selecting period id from database");
+            System.out.println(e.toString());
         }
         
         try 
@@ -191,6 +196,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem when mapping periodId by id to int, result could be null");
+            System.out.println(e.toString());
         }
   
         return periodId;
@@ -214,6 +220,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem when getting an address by id from database!");
+            System.out.println(e.toString());
         }
         
         try 
@@ -254,6 +261,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem when mapping an address by id from database into an instance, result could be null!");
+            System.out.println(e.toString());
         }
         
         return address;
@@ -275,6 +283,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem in selecting an address from database by person id");
+            System.out.println(e.toString());
         }
         
         try 
@@ -318,6 +327,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem when mapping addresses selected by person id from database to a new instance, result could be null");
+            System.out.println(e.toString());
         }
         
         return addressArray;
@@ -348,6 +358,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem in inserting an address into database.");
+            System.out.println(e.toString());
         }
         
          //get ID
@@ -361,6 +372,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem when selecting id from inserted address");
+            System.out.println(e.toString());
         }
         
         try 
@@ -375,6 +387,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem when mapping id from inserted address into int value");
+            System.out.println(e.toString());
         }
         
         return id;
@@ -405,6 +418,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem when updating address to the database.");
+            System.out.println(e.toString());
             return false;
         }
 
@@ -425,6 +439,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem when deleting an address from database, maybe id not found");
+            System.out.println(e.toString());
             return false;
         }
  
@@ -450,6 +465,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem when selecting a budget by id from database");
+            System.out.println(e.toString());
         }
         
         try 
@@ -470,6 +486,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem mapping budget selected by id from database to instance, result could be null");
+            System.out.println(e.toString());
         }
          
         return budget;
@@ -492,6 +509,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem when selecting budgets from a person by id from database");
+            System.out.println(e.toString());
         }
         
         try 
@@ -516,6 +534,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem when mapping budget by person id from database, result could be null.");
+            System.out.println(e.toString());
         }
         
         
@@ -539,6 +558,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem selecting budgets by project id from database");
+            System.out.println(e.toString());
         }
         
         try 
@@ -563,6 +583,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem when mapping budget by project id to instance, result could be null");
+            System.out.println(e.toString());
         }
         
         
@@ -586,6 +607,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem selecting subbudget from database");
+            System.out.println(e.toString());
         }
         
         try 
@@ -610,6 +632,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem when mapping subbudget to database, result could be null");
+            System.out.println(e.toString());
         }
         
         return arrayBudget;
@@ -646,6 +669,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem when inserting budget into database");
+            System.out.println(e.toString());
         }
         
         //get ID
@@ -659,6 +683,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem when selecting inserted budget id from database ");
+            System.out.println(e.toString());
         }
         
         try 
@@ -673,6 +698,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem when mapping inserted budget id");
+            System.out.println(e.toString());
         }
         
         return id;
@@ -709,6 +735,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem when updating budget to database");
+            System.out.println(e.toString());
             return false;
         }
         
@@ -729,6 +756,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem when deleting budget from database");
+            System.out.println(e.toString());
             return false;
         }
         
@@ -754,6 +782,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem when selecting category by id from database");
+            System.out.println(e.toString());
         }
         
         try {
@@ -767,6 +796,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem when mapping category selected by id, to an instance");
+            System.out.println(e.toString());
         }
         
         return category;
@@ -808,6 +838,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem when mapping category selected by id, to an instance");
+            System.out.println(e.toString());
         }
         
         return category;
@@ -828,6 +859,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem when selecting category by id from database");
+            System.out.println(e.toString());
         }
         
         return this.fillCategoryContainer(rs);
@@ -899,6 +931,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem when inserting category into database");
+            System.out.println(e.toString());
         }
         
         //get ID
@@ -912,6 +945,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem when selecting id from inserted category");
+            System.out.println(e.toString());
         }
         
         try 
@@ -926,6 +960,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem when mapping inserted category id");
+            System.out.println(e.toString());
         }
         
         
@@ -949,6 +984,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem when updating category to database");
+            System.out.println(e.toString());
             return false;
         }
         
@@ -969,6 +1005,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem deleting category from database");
+            System.out.println(e.toString());
             return false;
         }
         
@@ -1638,6 +1675,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem when selecting outgoing by id from database");
+            System.out.println(e.toString());
         }
         
         try 
@@ -1659,6 +1697,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem mapping outgoing selected by id, result could be null");
+            System.out.println(e.toString());
         }
 
         return outgoing;
@@ -1682,6 +1721,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem selecting outgoings by person from database");
+            System.out.println(e.toString());
         }
         
         try {
@@ -1729,6 +1769,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem selecting outgoings by budget from database");
+            System.out.println(e.toString());
         }
         
         try 
@@ -1754,6 +1795,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem mapping outgoings selected by a budget, result could be null");
+            System.out.println(e.toString());
         }
         
         return arrayOutgoing;
@@ -1777,6 +1819,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem selecting outgoings by category from database");
+            System.out.println(e.toString());
         }
         
         try 
@@ -1802,6 +1845,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem mapping outgoings selected by category, result could be null");
+            System.out.println(e.toString());
         }
 
         return arrayOutgoing;
@@ -1833,6 +1877,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem when inserting outgoing into database");
+            System.out.println(e.toString());
         }
         
         //get ID
@@ -1846,6 +1891,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem selecting id from inserted outgoing from database");
+            System.out.println(e.toString());
         }
         
         try 
@@ -1860,6 +1906,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem mapping id from inserted outoging");
+            System.out.println(e.toString());
         }
 
         return id;
@@ -1889,6 +1936,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem updating outgoing to database");
+            System.out.println(e.toString());
             return false;
         }
 
@@ -1911,6 +1959,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem deleting outgoing from database");
+            System.out.println(e.toString());
             return false;
         }
         
@@ -1955,6 +2004,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem when mapping outgoing has tax selected by id to an instance, result could be null");
+            System.out.println(e.toString());
         }
 
         return oht;
@@ -1978,6 +2028,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem when selecting ougoing has tax by outgoing id from database");
+            System.out.println(e.toString());
         }
         
         try 
@@ -1998,6 +2049,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem when mapping ougoing has tax selected by outgoing id, result could be null");
+            System.out.println(e.toString());
         }
 
         return arrayOht;
@@ -2025,6 +2077,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem when inserting outgoing has tax into database");
+            System.out.println(e.toString());
         }
         
         //get ID
@@ -2038,6 +2091,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem selecting id from inserted outgoing has tax from database");
+            System.out.println(e.toString());
         }
         
         try 
@@ -2052,6 +2106,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem when mapping id from inserted outgoing has tax");
+            System.out.println(e.toString());
         }
 
         return id;
@@ -2076,6 +2131,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem when updating outgoing has tax to database");
+            System.out.println(e.toString());
             return false;
         }
 
@@ -2099,6 +2155,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem when deleting outgoing has tax from database");
+            System.out.println(e.toString());
             return false;
         }
 
@@ -2124,6 +2181,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem selecting person by id from database");
+            System.out.println(e.toString());
         }
         
         try 
@@ -2143,6 +2201,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem mapping selected person by id, result could be null");
+            System.out.println(e.toString());
         }
 
         return person;
@@ -2171,6 +2230,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem inserting person into database");
+            System.out.println(e.toString());
         }
 
         //get ID
@@ -2185,6 +2245,7 @@ public class DatabaseManager {
         {
             
             System.out.println("Problem selecting id from inserted person from database");
+            System.out.println(e.toString());
         }
         
         try 
@@ -2199,6 +2260,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem mapping id from inserted person");
+            System.out.println(e.toString());
         }
 
         return id;
@@ -2226,6 +2288,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem updating person to database");
+            System.out.println(e.toString());
             return false;
         }
  
@@ -2248,6 +2311,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem deleting person from database");
+            System.out.println(e.toString());
             return false;
         }
 
@@ -2273,6 +2337,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem selecting project by id from database");
+            System.out.println(e.toString());
         }
         
         try 
@@ -2288,6 +2353,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem mapping selected project by id, result could be null");
+            System.out.println(e.toString());
         }
 
         return project;
@@ -2312,6 +2378,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem inserting project into database");
+            System.out.println(e.toString());
         }
         
         //get ID
@@ -2325,6 +2392,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem selecting id from inserted project from database");
+            System.out.println(e.toString());
         }
         
         try 
@@ -2339,6 +2407,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem mapping id from inserted project");
+            System.out.println(e.toString());
         }
         
         return id;
@@ -2360,6 +2429,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem updating project to database");
+            System.out.println(e.toString());
             return false;
         }
 
@@ -2382,6 +2452,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem deleting project from database");
+            System.out.println(e.toString());
             return false;
         }
  
@@ -2407,6 +2478,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem selecting receipt by id from database");
+            System.out.println(e.toString());
         }
         
         try 
@@ -2425,6 +2497,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem mapping selected receipt by id, result could be null");
+            System.out.println(e.toString());
         }
         
         return receipt;
@@ -2452,6 +2525,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem inserting receipt into database");
+            System.out.println(e.toString());
         }
         
         //get ID
@@ -2465,6 +2539,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem selecting id from inserted receipt from database");
+            System.out.println(e.toString());
         }
         
         try 
@@ -2479,6 +2554,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem mapping id from inserted project");
+            System.out.println(e.toString());
         }
         
         return id;
@@ -2504,6 +2580,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem updating receipt to database");
+            System.out.println(e.toString());
             return false;
         }
 
@@ -2526,6 +2603,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem deleting receipt from database");
+            System.out.println(e.toString());
             return false;
         }
  
@@ -2545,6 +2623,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem selecting Max Receipt.ID from Database");
+            System.out.println(e.toString());
         }
         
         int result = -1;
@@ -2560,6 +2639,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem mapping selected value");
+            System.out.println(e.toString());
         }
 
         return result;
@@ -2582,6 +2662,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem selecting system notification by id from database");
+            System.out.println(e.toString());
         }
         
         try 
@@ -2618,6 +2699,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem mapping system notification selected by id, result could be null");
+            System.out.println(e.toString());
         }
 
         return notifications;
@@ -2639,6 +2721,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem selecting system notification by id from database");
+            System.out.println(e.toString());
         }
         
         try 
@@ -2671,6 +2754,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem mapping system notification selected by id, result could be null");
+            System.out.println(e.toString());
         }
 
         return notification;
@@ -2696,6 +2780,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem inserting system notification into database");
+            System.out.println(e.toString());
         }
         
         //get ID
@@ -2709,6 +2794,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem selecting id from inserted system notification from database");
+            System.out.println(e.toString());
         }
         
         try 
@@ -2723,6 +2809,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem mapping selected id from inserted system notification");
+            System.out.println(e.toString());
         }
 
         return id;
@@ -2746,6 +2833,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem updating system notification to database");
+            System.out.println(e.toString());
             return false;
         }
 
@@ -2768,6 +2856,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem deleting system notification from database");
+            System.out.println(e.toString());
             return false;
         }
 
@@ -2793,6 +2882,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem selecting tax by id from database");
+            System.out.println(e.toString());
         }
         
         try 
@@ -2809,6 +2899,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem mapping selected tax by id, result could be null");
+            System.out.println(e.toString());
         }
 
         return tax;
@@ -2835,6 +2926,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem when inserting tax into database");
+            System.out.println(e.toString());
         }
         
         //get ID
@@ -2848,6 +2940,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem selecting id from inserted tax from database");
+            System.out.println(e.toString());
         }
         
         try 
@@ -2862,6 +2955,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem mapping id from inserted tax");
+            System.out.println(e.toString());
         }
 
         return id;
@@ -2886,6 +2980,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem updating tax to database");
+            System.out.println(e.toString());
             return false;
         }
 
@@ -2908,6 +3003,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem deleting tax from database");
+            System.out.println(e.toString());
             return false;
         }
 
