@@ -927,7 +927,7 @@ public class DatabaseManager {
     
     
     // <editor-fold defaultstate="collapsed" desc="category">
-    public Category getCategoryByID(int _id)
+      public Category getCategoryByID(int _id)
     {
         ResultSet rs = null;
         
@@ -943,6 +943,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem when selecting category by id from database");
+            System.out.println(e.toString());
         }
         
         try {
@@ -956,6 +957,48 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem when mapping category selected by id, to an instance");
+            System.out.println(e.toString());
+        }
+        
+        return category;
+    }
+    
+    public Category getCategoryByIDAndPersonID(int _CategoryId, int _PersonId)
+    {
+        ResultSet rs = null;
+        
+        Category category = new Category();
+        
+        try
+        {
+            PreparedStatement st = connection.prepareStatement("SELECT c.id AS Id, c.name AS Name FROM person p"
+                                                             + " JOIN budget b ON b.\"personID\" = p.id"
+                                                             + " JOIN outgoing o ON o.\"budgetID\" = b.id"
+                                                             + " JOIN category c ON c.id = o.\"categoryID\""
+                                                             + " WHERE p.id = ? AND c.id = ?");
+            st.setInt(1, _PersonId);
+            st.setInt(2, _CategoryId);
+            rs = st.executeQuery();
+        }
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem when selecting category by id from database");
+            System.out.println(e.toString());
+        }
+        
+        try {
+            while(rs.next())
+            {  
+                category.setId(rs.getInt("Id"));
+                category.setName(rs.getString("Name"));
+            }
+        } 
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem when mapping category selected by id, to an instance");
+            System.out.println(e.toString());
         }
         
         return category;
@@ -976,6 +1019,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem when selecting category by id from database");
+            System.out.println(e.toString());
         }
         
         return this.fillCategoryContainer(rs);
@@ -985,21 +1029,20 @@ public class DatabaseManager {
     {
         ResultSet rs = null;
         
-        ArrayList<Category> categoryContainer = new ArrayList<Category>();
-        
         try
         {
-            PreparedStatement st = connection.prepareStatement("SELECT c.id AS CategoryId, c.name AS CategoryName FROM person p"
-                                                              +" JOIN budget b ON p.id = b.personID"
-                                                              +" JOIN outgoing o ON b.id = o.budgetID"
-                                                              +" JOIN categroy c ON o.categoryID = c.id"
+            PreparedStatement st = connection.prepareStatement("SELECT c.id AS id, c.name AS name FROM person p"
+                                                              +" JOIN budget b ON p.id = b.\"personID\""
+                                                              +" JOIN outgoing o ON b.id = o.\"budgetID\""
+                                                              +" JOIN category c ON o.\"categoryID\" = c.id"
                                                               +" WHERE p.id = ?");
-            st.setInt(1, _PersonId);
+            st.setInt(1, 19);
             rs = st.executeQuery();
         }
         catch(Exception e)
         {
             System.out.println("Problem when selecting category by id from database");
+            System.out.println(e.toString());
         }
         
         return this.fillCategoryContainer(rs);
@@ -1023,6 +1066,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem when mapping category selected by id, to an instance");
+            System.out.println(e.toString());
         }
         
         return categoryContainer;
@@ -1047,6 +1091,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem when inserting category into database");
+            System.out.println(e.toString());
         }
         
         //get ID
@@ -1060,6 +1105,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem when selecting id from inserted category");
+            System.out.println(e.toString());
         }
         
         try 
@@ -1074,6 +1120,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem when mapping inserted category id");
+            System.out.println(e.toString());
         }
         
         
@@ -1097,6 +1144,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem when updating category to database");
+            System.out.println(e.toString());
             return false;
         }
         
@@ -1117,6 +1165,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem deleting category from database");
+            System.out.println(e.toString());
             return false;
         }
         
@@ -1824,6 +1873,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem when selecting outgoing by id from database");
+            System.out.println(e.toString());
         }
         
         try 
@@ -1845,11 +1895,60 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem mapping outgoing selected by id, result could be null");
+            System.out.println(e.toString());
         }
 
         return outgoing;
     }
     
+    public ArrayList<Outgoing> getOutgoingByPersonID(int _PersonID)
+    {
+        ArrayList arrayOutgoing = new ArrayList<Outgoing>();
+        
+        ResultSet rs = null;
+        
+        try
+        {
+            PreparedStatement st = connection.prepareStatement("SELECT o.id AS Id, o.amount AS Amount, o.start AS Start, o.ende AS Ende, o.timestamp AS Timestamp, o.\"budgetID\" AS BudgetId, o.\"categoryID\" AS CategoryId, o.period_id AS PeriodId"
+                                                              +" FROM person p JOIN budget b ON b.\"personID\" = p.id JOIN outgoing o ON o.\"budgetID\" = b.id WHERE p.id = ? ");
+            
+            st.setInt(1, _PersonID);
+            rs = st.executeQuery();
+        }
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem selecting outgoings by person from database");
+            System.out.println(e.toString());
+        }
+        
+        try {
+            while(rs.next())
+            {         
+                Outgoing tmpOutgoing       = new Outgoing();
+                
+                tmpOutgoing.setId(rs.getInt("Id"));
+                tmpOutgoing.setAmount(rs.getFloat("Amount"));
+                tmpOutgoing.setStart(rs.getTimestamp("Start"));
+                tmpOutgoing.setEnd(rs.getTimestamp("Ende"));
+                tmpOutgoing.setTimeStamp(rs.getTimestamp("timestamp"));
+                tmpOutgoing.setPersonId(_PersonID);
+                tmpOutgoing.setBudgetId(rs.getInt("BudgetId"));
+                tmpOutgoing.setCategoryId(rs.getInt("CategoryId"));
+                tmpOutgoing.setPeriod(this.getPeriodByID(rs.getInt("PeriodId"))); 
+
+                arrayOutgoing.add(tmpOutgoing);       
+            }  
+        } 
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem when mapping income by person id to instance, result could be null");
+            System.out.println(e.toString());
+        }
+        
+        return arrayOutgoing;
+    }
     
     public ArrayList<Outgoing> getOutgoingByBudgetID(int _budgetID)
     {
@@ -1868,6 +1967,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem selecting outgoings by budget from database");
+            System.out.println(e.toString());
         }
         
         try 
@@ -1893,6 +1993,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem mapping outgoings selected by a budget, result could be null");
+            System.out.println(e.toString());
         }
         
         return arrayOutgoing;
@@ -1916,6 +2017,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem selecting outgoings by category from database");
+            System.out.println(e.toString());
         }
         
         try 
@@ -1941,6 +2043,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem mapping outgoings selected by category, result could be null");
+            System.out.println(e.toString());
         }
 
         return arrayOutgoing;
@@ -1972,6 +2075,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem when inserting outgoing into database");
+            System.out.println(e.toString());
         }
         
         //get ID
@@ -1985,6 +2089,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem selecting id from inserted outgoing from database");
+            System.out.println(e.toString());
         }
         
         try 
@@ -1999,6 +2104,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem mapping id from inserted outoging");
+            System.out.println(e.toString());
         }
 
         return id;
@@ -2028,6 +2134,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem updating outgoing to database");
+            System.out.println(e.toString());
             return false;
         }
 
@@ -2050,6 +2157,7 @@ public class DatabaseManager {
         catch(Exception e)
         {
             System.out.println("Problem deleting outgoing from database");
+            System.out.println(e.toString());
             return false;
         }
         
