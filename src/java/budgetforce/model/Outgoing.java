@@ -21,7 +21,8 @@ public class Outgoing {
     //---------------------------------------------------
     // Get and set functions
     //---------------------------------------------------
-    @XmlTransient
+    //@XmlTransient
+    @XmlElement(name="outgoingid")
     public int getId() {
         return m_Id;
     }
@@ -100,6 +101,16 @@ public class Outgoing {
     public void setPeriod(EPeriod _Period) {
         this.m_Period = _Period;
     }
+    
+    @XmlElement(name="personid")
+    public int getPersonId() {
+        return this.m_PersonId;
+    }
+    
+    @XmlElement(name="personid")
+    public void setPersonId(int _PersonId) {
+        this.m_PersonId = _PersonId;
+    }
    
     //---------------------------------------------------
     // Private variables
@@ -112,4 +123,5 @@ public class Outgoing {
     private int             m_BudgetId;
     private int             m_CategoryId;
     private EPeriod         m_Period;
+    private int             m_PersonId;
 }

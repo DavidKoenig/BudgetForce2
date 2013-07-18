@@ -43,6 +43,11 @@ public class StatisticOutgoingCategory {
         this.m_Outgoings = _Outgoing;
     }
     
+    @XmlElement(name="outgoingscount")
+    public int getOutgoingsCount() {
+        return this.m_Outgoings.size();
+    }
+    
     @XmlElement(name="startdate")
     public Date getStartDate() {
         return m_Start;
