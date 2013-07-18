@@ -772,6 +772,46 @@ public class DatabaseManager {
         return category;
     }
     
+    // <editor-fold defaultstate="collapsed" desc="category">
+    public Category getCategoryByIDAndPersonID(int _CategoryId, int _PersonId)
+    {
+        ResultSet rs = null;
+        
+        Category category = new Category();
+        
+        try
+        {
+            PreparedStatement st = connection.prepareStatement("SELECT c.id AS Id, c.name AS Name FROM person p"
+                                                             + " JOIN budget b ON b.personID = p.id"
+                                                             + " JOIN outgoing o ON o.budgetID = b.id"
+                                                             + " JOIN category c ON c.id = o.categoryID"
+                                                             + " WHERE p.id = ? AND c.id = ?");
+            st.setInt(1, _PersonId);
+            st.setInt(2, _CategoryId);
+            rs = st.executeQuery();
+        }
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem when selecting category by id from database");
+        }
+        
+        try {
+            while(rs.next())
+            {  
+                category.setId(rs.getInt("Id"));
+                category.setName(rs.getString("Name"));
+            }
+        } 
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem when mapping category selected by id, to an instance");
+        }
+        
+        return category;
+    }
+    
     public ArrayList<Category> getCategoryByOutgoingId(int _OutgoingId)
     {
         ResultSet rs = null;
@@ -795,8 +835,6 @@ public class DatabaseManager {
     public ArrayList<Category> getCategoryByPersonId(int _PersonId)
     {
         ResultSet rs = null;
-        
-        ArrayList<Category> categoryContainer = new ArrayList<Category>();
         
         try
         {

@@ -21,7 +21,7 @@ import javax.ws.rs.Produces;
  *
  * @author David
  */
-@Path("statistics/outgoingCategory/")
+@Path("statistics/outgoingCategory/{PersonId}/")
 public class OutgoingCategoryResource {
 
     public OutgoingCategoryResource() 
@@ -32,9 +32,9 @@ public class OutgoingCategoryResource {
     @GET
     @Path("{id}")
     @Produces("application/json")
-    public StatisticOutgoingCategory getOutgoingCategory(@PathParam("id") Integer _CategoryId) {
+    public StatisticOutgoingCategory getOutgoingCategory(@PathParam("id") Integer _CategoryId, @PathParam("PersonId") Integer _PersonId) {
       
-        return StatisticOutgoingCategoryController.getStatistic(_CategoryId);
+        return StatisticOutgoingCategoryController.getStatistic(_CategoryId, _PersonId);
         
     }
 

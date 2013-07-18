@@ -17,13 +17,18 @@ public class StatisticOutgoingCategoryController
     {
     }
     
-    public static StatisticOutgoingCategory getStatistic(Integer _CategoryId)
+    public static StatisticOutgoingCategory getStatistic(Integer _CategoryId, Integer _PersonId)
     {
         StatisticOutgoingCategory Statistic = new StatisticOutgoingCategory();
         
         //---------------------------------------------------
+        // set PersonId
+        Statistic.setUserId(_PersonId);
+        //---------------------------------------------------       
+        
+        //---------------------------------------------------
         // get Category
-        Statistic.setCategory(DatabaseManager.getDatabaseManager().getCategoryByID(_CategoryId));
+        Statistic.setCategory(DatabaseManager.getDatabaseManager().getCategoryByIDAndPersonID(_CategoryId, _PersonId));
         //---------------------------------------------------
         
         //---------------------------------------------------

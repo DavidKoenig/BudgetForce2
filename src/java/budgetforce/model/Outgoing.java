@@ -21,7 +21,8 @@ public class Outgoing {
     //---------------------------------------------------
     // Get and set functions
     //---------------------------------------------------
-    @XmlTransient
+    //@XmlTransient
+    @XmlElement(name="outgoingid")
     public int getId() {
         return m_Id;
     }
