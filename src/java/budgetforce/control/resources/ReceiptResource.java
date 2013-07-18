@@ -7,7 +7,7 @@ package budgetforce.control.resources;
 import budgetforce.control.FileHandle;
 import budgetforce.model.Budget;
 import budgetforce.model.DatabaseManager;
-import budgetforce.model.Login;
+import budgetforce.model.login.Login;
 import budgetforce.model.Outgoing;
 import budgetforce.model.Receipt;
 

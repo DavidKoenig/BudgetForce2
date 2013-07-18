@@ -3,6 +3,9 @@ package budgetforce.model;
 
 // <editor-fold defaultstate="collapsed" desc="imports">
 
+import budgetforce.model.login.LoginToken;
+import budgetforce.model.login.TransToken;
+import budgetforce.model.login.Login;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -572,30 +575,25 @@ public class DatabaseManager {
     }
     
     
-    public boolean updateAddress(Address _address)
+    public boolean updateTransToken(TransToken _transToken)
     {       
         try
         {
-            PreparedStatement st = connection.prepareStatement("UPDATE address SET"
-                    + " \"streetNmbr\" = ?, city = ?, zipcode = ?, country = ?,"
-                    + " type = ?, \"personID\" = ?, \"addressAddition\" = ?"
+            PreparedStatement st = connection.prepareStatement("UPDATE transaction_token SET"
+                    + " token = ?, timestamp = ?, person_id = ?"
                     + " WHERE id = ? ");
             
-            st.setString(1, _address.getStreetNmbr());
-            st.setString(2, _address.getCity());
-            st.setString(3, _address.getZipCode());
-            st.setString(4, _address.getCountry());
-            st.setString(5, _address.getType().name()); 
-            st.setInt(6, _address.getPersondId());
-            st.setString(7, _address.getAddressAddition());
-            st.setInt(8, _address.getId());
+            st.setString(1, _transToken.getToken());
+            st.setTimestamp(2, _transToken.getTimestamp());
+            st.setInt(3, _transToken.getPersonId());
+            st.setInt(4, _transToken.getId());
             
             st.executeUpdate();
         }
         
         catch(Exception e)
         {
-            System.out.println("Problem when updating address to the database.");
+            System.out.println("Problem when updating transaction token to the database.");
             return false;
         }
 
@@ -603,11 +601,11 @@ public class DatabaseManager {
     }
     
     
-    public boolean deleteAddress(int _Id)
+    public boolean deleteTransToken(int _Id)
     {
         try
         {
-            PreparedStatement st = connection.prepareStatement("DELETE FROM address WHERE id = ?");
+            PreparedStatement st = connection.prepareStatement("DELETE FROM transaction_token WHERE id = ?");
             
             st.setInt(1, _Id);
             st.executeUpdate();
@@ -615,7 +613,7 @@ public class DatabaseManager {
         
         catch(Exception e)
         {
-            System.out.println("Problem when deleting an address from database, maybe id not found");
+            System.out.println("Problem when deleting an transaction token from database, maybe id not found");
             return false;
         }
  
@@ -1670,6 +1668,44 @@ public class DatabaseManager {
         return lgToken;
     }
       
+    
+    public LoginToken getLoginTokenByString(String _loginToken)
+    {
+        LoginToken lgToken = new LoginToken();
+        ResultSet rs = null;
+        
+        try
+        {
+            PreparedStatement st = connection.prepareStatement("SELECT * FROM login_token WHERE token = ?");
+            
+            st.setString(1, _loginToken);
+            rs = st.executeQuery();
+        }
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem selecting login token by string from database");
+        }
+        
+        try 
+        {
+            while(rs.next())
+            {  
+                lgToken.setId(rs.getInt("id"));
+                lgToken.setTimestamp(rs.getTimestamp("timestamp"));
+                lgToken.setToken(rs.getString("token"));
+            }
+            rs.close();
+        } 
+        
+        catch(Exception e)
+        {
+            System.out.println("Problem mapping selected login token by id, result could be null");
+        }
+
+        return lgToken;
+    }
+    
     
     public int insertLoginToken(LoginToken _lgToken)     //returns the id of the inserted person
     {       

@@ -2,7 +2,7 @@
 package budgetforce.control.resources;
 
 // <editor-fold defaultstate="collapsed" desc="imports">
-import budgetforce.model.Login;
+import budgetforce.model.login.Login;
 import budgetforce.model.DatabaseManager;
 
 import javax.ws.rs.core.Response;

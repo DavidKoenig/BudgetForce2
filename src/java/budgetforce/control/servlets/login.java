@@ -6,7 +6,7 @@ package budgetforce.control.servlets;
 */
 
 import budgetforce.model.DatabaseManager;
-import budgetforce.model.Login;
+import budgetforce.model.login.Login;
 
 
 import java.io.IOException;

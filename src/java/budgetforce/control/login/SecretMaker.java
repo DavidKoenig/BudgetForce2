@@ -1,5 +1,5 @@
 
-package budgetforce.control;
+package budgetforce.control.login;
 
 import org.apache.commons.codec.digest.Crypt;
 

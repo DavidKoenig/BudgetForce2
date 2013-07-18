@@ -11,7 +11,7 @@ import budgetforce.control.Budget;
 import budgetforce.control.Income;
 import budgetforce.control.Outgoing;
 import budgetforce.model.DatabaseManager;
-import budgetforce.model.Login;
+import budgetforce.model.login.Login;
 import budgetforce.model.Person;
 
 import java.io.IOException;

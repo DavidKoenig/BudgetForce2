@@ -1,5 +1,5 @@
 
-package budgetforce.model;
+package budgetforce.model.login;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
