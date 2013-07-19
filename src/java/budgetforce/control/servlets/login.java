@@ -1,10 +1,10 @@
-package budgetforce.control.servlets;
+/*package budgetforce.control.servlets;
 
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
 */
-
+/*
 import budgetforce.model.DatabaseManager;
 import budgetforce.model.login.Login;
 
@@ -25,6 +25,7 @@ import javax.servlet.http.HttpSession;
  * @author Soi Fon
 */
 
+/*
 @WebServlet(name = "login", urlPatterns = {"/login"})
 public class login extends HttpServlet 
 {
@@ -35,7 +36,7 @@ public class login extends HttpServlet
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
-            /* TODO output your page here. You may use following sample code. */
+
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
@@ -91,3 +92,4 @@ public class login extends HttpServlet
     }
 }
 
+*/

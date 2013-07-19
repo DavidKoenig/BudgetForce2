@@ -28,7 +28,7 @@ import javax.ws.rs.Consumes;
  *
  * @author David König
  */
-@Path("/login")
+@Path("/test6")
 public class LoginResource {
 
     public LoginResource() 
@@ -40,12 +40,13 @@ public class LoginResource {
     @Produces("application/json")
     public String getloginToken() 
     {
-        LoginTokenController loginTokenController = new LoginTokenController();
-        return loginTokenController.getLoginToken();
+        //LoginTokenController loginTokenController = new LoginTokenController();
+        //return loginTokenController.getLoginToken();
+        return "test";
     }
     
     @POST
-    @Path("/dologin")
+    @Path("dologin")
     @Produces("application/json")
     @Consumes("application/json")
     public String doLogin(DoLogin _DoLogin)
