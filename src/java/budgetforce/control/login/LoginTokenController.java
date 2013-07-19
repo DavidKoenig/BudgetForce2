@@ -38,6 +38,7 @@ public class LoginTokenController
     //synchronized, because same timestamp would cause same login token --> must be unique
     public synchronized String getLoginToken()
     {
+        //Login token is timestamp + secret
          Timestamp timestamp = new Timestamp(System.currentTimeMillis());
          m_LoginToken.setTimestamp(timestamp); 
          
@@ -61,6 +62,7 @@ public class LoginTokenController
          return m_LoginToken.getToken();
     }
     
+    //check if login token exists or is expired
     boolean isLoginTokenValid(String _LoginToken)
     {
         m_LoginToken = DatabaseManager.getDatabaseManager().getLoginTokenByString(_LoginToken);

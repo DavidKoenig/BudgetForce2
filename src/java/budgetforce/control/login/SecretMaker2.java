@@ -38,6 +38,7 @@ public class SecretMaker2 {
     throws NoSuchAlgorithmException, UnsupportedEncodingException
     {
         MessageDigest md;
+        //add at every encryption a secret
         String value = text + "DaVeLicIous";
         md = MessageDigest.getInstance("SHA-512");
         byte[] sha1hash = new byte[40];

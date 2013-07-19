@@ -38,6 +38,7 @@ public class LoginResource {
     {
     }
 
+    //first you have to get an login token, which is 2 minutes valid, after that time you have to get a new one
     @GET
     @Path("/logintoken")
     @Produces("application/json")
@@ -49,6 +50,7 @@ public class LoginResource {
         return test;
     }
     
+    // client sends login token, authentification token and username
     @POST
     @Path("dologin")
     @Produces("application/json")
@@ -59,8 +61,8 @@ public class LoginResource {
         
         LoginController loginController = new LoginController();
         
+        // check if the login is successful, if yes, get trans token and return it
         boolean login =  loginController.loginSuccessful(_DoLogin.getLoginToken(), _DoLogin.getAuthToken(), _DoLogin.getUsername());
-        System.out.println("Login true?" + login);
          
         if(login)
         {
@@ -74,18 +76,7 @@ public class LoginResource {
         
         return transToken.getToken();
     }
-    
-    
-    @GET
-    @Path("{user}/{password}")
-    @Produces("application/json")
-    public int getPersonIDByLogin(@PathParam("user") String _Username, @PathParam("password") String _Password) 
-    {
-        Login login = DatabaseManager.getDatabaseManager().getLoginByUsername(_Username);
-        
-        if (login.getPassword().equals(_Password))  return login.getPersondId();
-        else                                        return 0;
-    }
+  
 
     //post for creating a new entry
     @POST
@@ -115,6 +106,7 @@ public class LoginResource {
         return Response.status(201).entity(successful).build();
     }
     
+    // later only the user can delete his acount by himself, the same at updating
     @DELETE
     @Path("/delete/{username}")
     @Consumes("application/json")
