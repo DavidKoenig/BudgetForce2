@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package budgetforce.control.statistics.resources;
+package budgetforce.control.resources.statistics;
 
 import budgetforce.model.statistics.StatisticOutgoingCategory;
 import budgetforce.control.statistics.StatisticOutgoingCategoryController;
