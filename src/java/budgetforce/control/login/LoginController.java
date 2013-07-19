@@ -84,7 +84,7 @@ public class LoginController
         m_TransToken.setPersonId(m_Login.getPersondId());
         m_TransToken.setTimestamp(timestamp);
         
-        DatabaseManager.getDatabaseManager().insertTransToken(m_TransToken);
+        int id = DatabaseManager.getDatabaseManager().insertTransToken(m_TransToken);
         
         return m_TransToken;
     } 

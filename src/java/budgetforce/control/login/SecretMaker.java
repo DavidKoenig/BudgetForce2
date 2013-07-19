@@ -1,3 +1,4 @@
+//this one is not implementet, because apache commons creates always the same hash value, no matter which values you give
 
 package budgetforce.control.login;
 

@@ -529,13 +529,14 @@ public class DatabaseManager {
         
         try
         {
+            
             PreparedStatement st = connection.prepareStatement("INSERT INTO transaction_token(token,"
-                    + " timepstamp, person_id)"
+                    + " timestamp, person_id)"
                     + " VALUES(?, ?, ?)");
             st.setString(1, _transToken.getToken());
             st.setTimestamp(2, _transToken.getTimestamp());
             st.setInt(3, _transToken.getPersonId());
-            
+
             st.executeUpdate();
         }
         

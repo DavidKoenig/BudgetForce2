@@ -76,9 +76,9 @@ public class LoginTokenController
             Timestamp timestamp = new Timestamp(System.currentTimeMillis());
             long difference = (timestamp.getTime() - m_LoginToken.getTimestamp().getTime());
             
-            if(difference >= 10020)    return true; //10020 for testing
+            if(difference >= 120)    return true; //login token is 2 minutes valid, after that time it has to request a new one
             
-            else System.out.println("Login Token nicht mehr valide!"); return false;
+            else System.out.println("Login Token abgelaufen!"); return false;
         }
     }
     
