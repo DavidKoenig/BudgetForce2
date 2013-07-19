@@ -28,7 +28,8 @@ import javax.ws.rs.Consumes;
  *
  * @author David König
  */
-@Path("/test6")
+
+@Path("/login")
 public class LoginResource {
 
     public LoginResource() 
@@ -40,9 +41,10 @@ public class LoginResource {
     @Produces("application/json")
     public String getloginToken() 
     {
-        //LoginTokenController loginTokenController = new LoginTokenController();
-        //return loginTokenController.getLoginToken();
-        return "test";
+        LoginTokenController loginTokenController = new LoginTokenController();
+        String test =  loginTokenController.getLoginToken();
+        
+        return test;
     }
     
     @POST
@@ -69,7 +71,7 @@ public class LoginResource {
         return transToken.getToken();
     }
     
-    /*
+    
     @GET
     @Path("{user}/{password}")
     @Produces("application/json")
@@ -94,7 +96,7 @@ public class LoginResource {
         
         return Response.status(201).entity(_Login).build();
     }
-    */
+    
     
     //put for updating an entry
     @PUT

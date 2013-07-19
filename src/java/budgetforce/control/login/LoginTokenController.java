@@ -6,6 +6,8 @@ package budgetforce.control.login;
 
 import budgetforce.model.DatabaseManager;
 import budgetforce.model.login.LoginToken;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 
 import java.sql.Timestamp;
 
@@ -28,11 +30,31 @@ public class LoginTokenController
     }
     */
     
+    public LoginTokenController()
+    {
+        m_LoginToken = new LoginToken();
+    }
+    
     //synchronized, because same timestamp would cause same login token --> must be unique
     public synchronized String getLoginToken()
     {
-         m_LoginToken.setTimestamp(new Timestamp(System.currentTimeMillis() / 1000)); 
-         m_LoginToken.setToken(SecretMaker.getInstance().makeSecretSHA512(m_LoginToken.getTimestamp().toString()));
+         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+         m_LoginToken.setTimestamp(timestamp); 
+         
+         try
+         {
+             m_LoginToken.setToken(SecretMaker2.SHA512(timestamp.toString()));
+         }
+         
+         catch(NoSuchAlgorithmException ex)
+         {
+             System.out.println(ex.getMessage());
+         }
+         
+         catch (UnsupportedEncodingException ex)
+         {
+            System.out.println(ex.getMessage());
+         }
          
          DatabaseManager.getDatabaseManager().insertLoginToken(m_LoginToken);
          
@@ -59,6 +81,6 @@ public class LoginTokenController
         }
     }
     
-    private LoginToken                  m_LoginToken;
+    private LoginToken m_LoginToken;
     //private static LoginTokenController m_LoginTokenController = null;
 }

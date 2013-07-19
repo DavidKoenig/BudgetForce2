@@ -23,7 +23,9 @@ public class SecretMaker
     
     public String makeSecretSHA512(String _Values)
     {
-        String hashed = Crypt.crypt("secret", "$6$" + _Values + this.m_Secret + "$");
+        System.out.println("VALES: " + _Values);
+        String hashed = Crypt.crypt("secret", "$6$" + "bla" + "$" + _Values + this.m_Secret);
+        System.out.println("HASED: " + hashed);
         return hashed;
     }
  

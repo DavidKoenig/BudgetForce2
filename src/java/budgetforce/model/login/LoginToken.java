@@ -17,24 +17,24 @@ public class LoginToken
         return m_Id;
     }
 
-    public void setId(int m_Id) {
-        this.m_Id = m_Id;
+    public void setId(int _Id) {
+        this.m_Id = _Id;
     }
 
     public String getToken() {
         return m_Token;
     }
 
-    public void setToken(String m_Token) {
-        this.m_Token = m_Token;
+    public void setToken(String _Token) {
+        this.m_Token = _Token;
     }
 
     public Timestamp getTimestamp() {
         return m_Timestamp;
     }
 
-    public void setTimestamp(Timestamp m_Timestamp) {
-        this.m_Timestamp = m_Timestamp;
+    public void setTimestamp(Timestamp _Timestamp) {
+        this.m_Timestamp = _Timestamp;
     }
     
     

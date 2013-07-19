@@ -11,9 +11,8 @@ package budgetforce.control.basti;
  *
  * @author Soi Fon
 */
-/*
+
 public class SessionLogin 
 {
     public boolean loggedIn;
 }
-*/

@@ -1,10 +1,10 @@
-/*package budgetforce.control.servlets;
+package budgetforce.control.servlets;
 
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
 */
-/*
+
 import budgetforce.model.DatabaseManager;
 import budgetforce.model.login.Login;
 
@@ -25,7 +25,6 @@ import javax.servlet.http.HttpSession;
  * @author Soi Fon
 */
 
-/*
 @WebServlet(name = "login", urlPatterns = {"/login"})
 public class login extends HttpServlet 
 {
@@ -92,4 +91,3 @@ public class login extends HttpServlet
     }
 }
 
-*/

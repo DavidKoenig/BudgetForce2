@@ -28,7 +28,7 @@ import javax.servlet.RequestDispatcher;
  *
  * @author Soi Fon
 */
-/*
+
 @WebServlet(name = "register", urlPatterns = {"/register"})
 public class register extends HttpServlet {
 
@@ -85,4 +85,3 @@ public class register extends HttpServlet {
         return "Registers a new User at this page";
     }
 }
-*/
