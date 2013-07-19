@@ -6,6 +6,8 @@ import budgetforce.model.login.Login;
 import budgetforce.control.login.LoginController;
 import budgetforce.control.login.LoginTokenController;
 import budgetforce.model.DatabaseManager;
+import budgetforce.model.login.DoLogin;
+import budgetforce.model.login.TransToken;
 
 import javax.ws.rs.core.Response;
 
@@ -46,9 +48,24 @@ public class LoginResource {
     @Path("/dologin")
     @Produces("application/json")
     @Consumes("application/json")
-    public String login()
+    public String doLogin(DoLogin _DoLogin)
     {
-        return "test";
+        TransToken transToken = new TransToken();
+        LoginController loginController = new LoginController();
+        
+        boolean login =  loginController.loginSuccessful(_DoLogin.getLoginToken(), _DoLogin.getAuthToken(), _DoLogin.getUsername());
+        
+        if(login)
+        {
+            transToken = loginController.getTransToken();
+        }
+        
+        else
+        {
+            transToken.setToken("error");
+        }
+        
+        return transToken.getToken();
     }
     
     /*
