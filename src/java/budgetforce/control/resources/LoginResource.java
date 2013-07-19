@@ -8,6 +8,8 @@ import budgetforce.control.login.LoginTokenController;
 import budgetforce.model.DatabaseManager;
 import budgetforce.model.login.DoLogin;
 import budgetforce.model.login.TransToken;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 
 import javax.ws.rs.core.Response;
 
@@ -51,16 +53,18 @@ public class LoginResource {
     @Path("dologin")
     @Produces("application/json")
     @Consumes("application/json")
-    public String doLogin(DoLogin _DoLogin)
+    public String doLogin(DoLogin _DoLogin) throws NoSuchAlgorithmException
     {
         TransToken transToken = new TransToken();
+        
         LoginController loginController = new LoginController();
         
         boolean login =  loginController.loginSuccessful(_DoLogin.getLoginToken(), _DoLogin.getAuthToken(), _DoLogin.getUsername());
-        
+        System.out.println("Login true?" + login);
+         
         if(login)
         {
-            transToken = loginController.getTransToken();
+          transToken = loginController.getTransToken();
         }
         
         else

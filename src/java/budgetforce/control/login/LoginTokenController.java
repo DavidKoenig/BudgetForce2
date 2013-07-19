@@ -67,17 +67,18 @@ public class LoginTokenController
         
         if(m_LoginToken == null)
         {
+            System.out.println("Login Token existiert nicht!");
             return false;
         }
         
         else
         {
-            Timestamp timestamp = new Timestamp(System.currentTimeMillis() / 1000);
-            long difference = (timestamp.getTime() - m_LoginToken.getTimestamp().getTime()) / 1000;
+            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+            long difference = (timestamp.getTime() - m_LoginToken.getTimestamp().getTime());
             
-            if(difference <= 120)    return true; 
+            if(difference >= 10020)    return true; //10020 for testing
             
-            else return false;
+            else System.out.println("Login Token nicht mehr valide!"); return false;
         }
     }
     

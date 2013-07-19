@@ -22,11 +22,11 @@ public class DoLogin
         this.m_LoginToken = m_LoginToken;
     }
 
-    @XmlElement(name="authtoken")
     public String getAuthToken() {
         return m_AuthToken;
     }
     
+    @XmlElement(name="authtoken")
     public void setAuthToken(String m_AuthToken) {
         this.m_AuthToken = m_AuthToken;
     }
@@ -35,7 +35,7 @@ public class DoLogin
         return m_Username;
     }
 
-    @XmlElement(name="streetnmbr")
+    @XmlElement(name="username")
     public void setUsername(String m_Username) {
         this.m_Username = m_Username;
     }
