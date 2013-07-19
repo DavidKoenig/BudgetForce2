@@ -1,6 +1,5 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * source: http://www.bennyn.de/programmierung/java/sha-512-verschlusselung-mit-java.html
  */
 package budgetforce.control.login;
 
